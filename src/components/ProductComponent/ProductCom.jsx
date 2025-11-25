@@ -24,6 +24,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { LuDot } from "react-icons/lu";
 import Loader from "../common/Loader";
 import CateComponent2 from "../Home_Components/modulerSolution/CateComponent2";
+import { HiChevronRight } from "react-icons/hi2";
 
 const theme = createTheme({
   components: {
@@ -119,6 +120,10 @@ const ProductCom = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [selectedSubcategoryId, setSelectedSubcategoryId] = useState(null);
   const [selectedProductId, setSelectedProductId] = useState(null);
+  const [categoryName, setCategoryName] = useState();
+  const [subCategoryName, setSubCategoryName] = useState();
+  const [cateId, setcateId] = useState();
+  const [subCateId, setsubCateId] = useState();
 
   const isInitialLoadRef = useRef(false);
   const hasProcessedUrlRef = useRef(false);
@@ -130,13 +135,276 @@ const ProductCom = () => {
   const scrolling = useRef(false);
 
   // Smooth scrolling useEffect (keeping existing scroll behavior)
+  // useEffect(() => {
+  //   const leftElement = leftPanelRef.current;
+  //   const rightElement = rightPanelRef.current;
+
+  //   const smoothScrollTo = (element, targetScrollTop) => {
+  //     if (!element) return;
+
+  //     const startScrollTop = element.scrollTop;
+  //     const distance = targetScrollTop - startScrollTop;
+  //     const duration = 300;
+  //     let startTime = null;
+
+  //     const animateScroll = (currentTime) => {
+  //       if (startTime === null) startTime = currentTime;
+  //       const timeElapsed = currentTime - startTime;
+  //       const progress = Math.min(timeElapsed / duration, 1);
+  //       const ease = 1 - Math.pow(1 - progress, 3);
+  //       element.scrollTop = startScrollTop + distance * ease;
+
+  //       if (progress < 1) {
+  //         requestAnimationFrame(animateScroll);
+  //       }
+  //     };
+
+  //     requestAnimationFrame(animateScroll);
+  //   };
+
+  //   const scrollToTop = (panel = "both") => {
+  //     if (panel === "left" || panel === "both") {
+  //       if (leftElement) {
+  //         smoothScrollTo(leftElement, 0);
+  //       }
+  //     }
+
+  //     if (panel === "right" || panel === "both") {
+  //       if (rightElement) {
+  //         smoothScrollTo(rightElement, 0);
+  //       }
+  //     }
+  //   };
+
+  //   const scrollToActiveItem = () => {
+  //     if (!leftElement) return;
+
+  //     const activeAccordion = leftElement.querySelector(".Mui-expanded");
+  //     if (activeAccordion) {
+  //       const containerRect = leftElement.getBoundingClientRect();
+  //       const itemRect = activeAccordion.getBoundingClientRect();
+
+  //       if (
+  //         itemRect.top < containerRect.top ||
+  //         itemRect.bottom > containerRect.bottom
+  //       ) {
+  //         const scrollTop =
+  //           activeAccordion.offsetTop - leftElement.offsetTop - 20;
+  //         smoothScrollTo(leftElement, scrollTop);
+  //       }
+  //     }
+  //   };
+
+  //   const handleLeftPanelWheel = (e) => {
+  //     if (!leftElement) return;
+
+  //     const isScrollable = leftElement.scrollHeight > leftElement.clientHeight;
+  //     if (!isScrollable) return;
+
+  //     const atTop = leftElement.scrollTop <= 0;
+  //     const atBottom =
+  //       leftElement.scrollTop >=
+  //       leftElement.scrollHeight - leftElement.clientHeight;
+
+  //     const scrollingDown = e.deltaY > 0;
+  //     const scrollingUp = e.deltaY < 0;
+
+  //     if ((scrollingDown && !atBottom) || (scrollingUp && !atTop)) {
+  //       e.preventDefault();
+  //       e.stopPropagation();
+
+  //       const scrollAmount = e.deltaY * 0.8;
+  //       const newScrollTop = Math.max(
+  //         0,
+  //         Math.min(
+  //           leftElement.scrollTop + scrollAmount,
+  //           leftElement.scrollHeight - leftElement.clientHeight
+  //         )
+  //       );
+
+  //       smoothScrollTo(leftElement, newScrollTop);
+  //     }
+  //   };
+
+  //   const handleRightPanelWheel = (e) => {
+  //     if (!rightElement) return;
+
+  //     const isScrollable =
+  //       rightElement.scrollHeight > rightElement.clientHeight;
+  //     if (!isScrollable) return;
+
+  //     const atTop = rightElement.scrollTop <= 0;
+  //     const atBottom =
+  //       rightElement.scrollTop >=
+  //       rightElement.scrollHeight - rightElement.clientHeight;
+
+  //     const scrollingDown = e.deltaY > 0;
+  //     const scrollingUp = e.deltaY < 0;
+
+  //     if ((scrollingDown && !atBottom) || (scrollingUp && !atTop)) {
+  //       e.preventDefault();
+  //       e.stopPropagation();
+
+  //       const scrollAmount = e.deltaY * 0.8;
+  //       const newScrollTop = Math.max(
+  //         0,
+  //         Math.min(
+  //           rightElement.scrollTop + scrollAmount,
+  //           rightElement.scrollHeight - rightElement.clientHeight
+  //         )
+  //       );
+
+  //       smoothScrollTo(rightElement, newScrollTop);
+  //     }
+  //   };
+
+  //   const handleKeyDown = (e) => {
+  //     if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+  //       const activeElement = document.activeElement;
+  //       let targetElement = null;
+
+  //       if (leftElement && leftElement.contains(activeElement)) {
+  //         targetElement = leftElement;
+  //       } else if (rightElement && rightElement.contains(activeElement)) {
+  //         targetElement = rightElement;
+  //       }
+
+  //       if (targetElement) {
+  //         e.preventDefault();
+  //         const scrollAmount = e.key === "ArrowDown" ? 50 : -50;
+  //         const newScrollTop = Math.max(
+  //           0,
+  //           Math.min(
+  //             targetElement.scrollTop + scrollAmount,
+  //             targetElement.scrollHeight - targetElement.clientHeight
+  //           )
+  //         );
+  //         smoothScrollTo(targetElement, newScrollTop);
+  //       }
+  //     }
+
+  //     if (e.key === "Home" || e.key === "End") {
+  //       if (rightElement && rightElement.contains(document.activeElement)) {
+  //         e.preventDefault();
+  //         const targetScrollTop =
+  //           e.key === "Home" ? 0 : rightElement.scrollHeight;
+  //         smoothScrollTo(rightElement, targetScrollTop);
+  //       }
+  //     }
+  //   };
+
+  //   const handleResize = () => {
+  //     if (leftElement) {
+  //       const maxScroll = leftElement.scrollHeight - leftElement.clientHeight;
+  //       if (leftElement.scrollTop > maxScroll) {
+  //         smoothScrollTo(leftElement, maxScroll);
+  //       }
+  //     }
+
+  //     if (rightElement) {
+  //       const maxScroll = rightElement.scrollHeight - rightElement.clientHeight;
+  //       if (rightElement.scrollTop > maxScroll) {
+  //         smoothScrollTo(rightElement, maxScroll);
+  //       }
+  //     }
+  //   };
+
+  //   const handleFocusIn = (e) => {
+  //     if (leftElement && leftElement.contains(e.target)) {
+  //       const elementRect = e.target.getBoundingClientRect();
+  //       const containerRect = leftElement.getBoundingClientRect();
+
+  //       if (
+  //         elementRect.top < containerRect.top ||
+  //         elementRect.bottom > containerRect.bottom
+  //       ) {
+  //         const scrollTop = e.target.offsetTop - leftElement.offsetTop - 50;
+  //         smoothScrollTo(leftElement, scrollTop);
+  //       }
+  //     }
+
+  //     if (rightElement && rightElement.contains(e.target)) {
+  //       const elementRect = e.target.getBoundingClientRect();
+  //       const containerRect = rightElement.getBoundingClientRect();
+
+  //       if (
+  //         elementRect.top < containerRect.top ||
+  //         elementRect.bottom > containerRect.bottom
+  //       ) {
+  //         const scrollTop = e.target.offsetTop - rightElement.offsetTop - 50;
+  //         smoothScrollTo(rightElement, scrollTop);
+  //       }
+  //     }
+  //   };
+
+  //   const handleStateChanges = () => {
+  //     if (expandedPanel) {
+  //       setTimeout(scrollToActiveItem, 100);
+  //     }
+
+  //     if (viewMode) {
+  //       scrollToTop("right");
+  //     }
+
+  //     // if (selectedCategory && !expandedPanel) {
+  //     //   setExpandedPanel("panel1");
+  //     // }
+
+  //     if (selectedCategory || selectedSubcategoryId) {
+  //       setTimeout(() => {
+  //         scrollToTop("right");
+  //       }, 150);
+  //     }
+  //   };
+
+  //   if (leftElement) {
+  //     leftElement.addEventListener("wheel", handleLeftPanelWheel, {
+  //       passive: false,
+  //     });
+  //   }
+
+  //   if (rightElement) {
+  //     rightElement.addEventListener("wheel", handleRightPanelWheel, {
+  //       passive: false,
+  //     });
+  //   }
+
+  //   document.addEventListener("keydown", handleKeyDown);
+  //   window.addEventListener("resize", handleResize);
+  //   document.addEventListener("focusin", handleFocusIn);
+
+  //   setTimeout(() => {
+  //     scrollToTop("both");
+  //   }, 100);
+
+  //   handleStateChanges();
+
+  //   return () => {
+  //     if (leftElement) {
+  //       leftElement.removeEventListener("wheel", handleLeftPanelWheel);
+  //     }
+  //     if (rightElement) {
+  //       rightElement.removeEventListener("wheel", handleRightPanelWheel);
+  //     }
+  //     document.removeEventListener("keydown", handleKeyDown);
+  //     window.removeEventListener("resize", handleResize);
+  //     document.removeEventListener("focusin", handleFocusIn);
+  //   };
+  // }, [
+  //   expandedPanel,
+  //   viewMode,
+  //   selectedCategory,
+  //   selectedSubcategoryId,
+  //   selectedProductId,
+  // ]);
+
   useEffect(() => {
     const leftElement = leftPanelRef.current;
     const rightElement = rightPanelRef.current;
 
+    // Smooth scroll function
     const smoothScrollTo = (element, targetScrollTop) => {
       if (!element) return;
-
       const startScrollTop = element.scrollTop;
       const distance = targetScrollTop - startScrollTop;
       const duration = 300;
@@ -148,7 +416,6 @@ const ProductCom = () => {
         const progress = Math.min(timeElapsed / duration, 1);
         const ease = 1 - Math.pow(1 - progress, 3);
         element.scrollTop = startScrollTop + distance * ease;
-
         if (progress < 1) {
           requestAnimationFrame(animateScroll);
         }
@@ -157,102 +424,42 @@ const ProductCom = () => {
       requestAnimationFrame(animateScroll);
     };
 
-    const scrollToTop = (panel = "both") => {
-      if (panel === "left" || panel === "both") {
-        if (leftElement) {
-          smoothScrollTo(leftElement, 0);
-        }
-      }
-
-      if (panel === "right" || panel === "both") {
-        if (rightElement) {
-          smoothScrollTo(rightElement, 0);
-        }
-      }
-    };
-
-    const scrollToActiveItem = () => {
-      if (!leftElement) return;
-
-      const activeAccordion = leftElement.querySelector(".Mui-expanded");
-      if (activeAccordion) {
-        const containerRect = leftElement.getBoundingClientRect();
-        const itemRect = activeAccordion.getBoundingClientRect();
-
-        if (
-          itemRect.top < containerRect.top ||
-          itemRect.bottom > containerRect.bottom
-        ) {
-          const scrollTop =
-            activeAccordion.offsetTop - leftElement.offsetTop - 20;
-          smoothScrollTo(leftElement, scrollTop);
-        }
-      }
-    };
-
-    const handleLeftPanelWheel = (e) => {
-      if (!leftElement) return;
-
-      const isScrollable = leftElement.scrollHeight > leftElement.clientHeight;
+    // Shared logic for both panels
+    const handlePanelWheel = (e, element) => {
+      if (!element) return;
+      const isScrollable = element.scrollHeight > element.clientHeight;
       if (!isScrollable) return;
 
-      const atTop = leftElement.scrollTop <= 0;
-      const atBottom =
-        leftElement.scrollTop >=
-        leftElement.scrollHeight - leftElement.clientHeight;
-
+      const atTop = element.scrollTop <= 0;
+      const atBottom = element.scrollTop >= element.scrollHeight - element.clientHeight;
       const scrollingDown = e.deltaY > 0;
       const scrollingUp = e.deltaY < 0;
 
       if ((scrollingDown && !atBottom) || (scrollingUp && !atTop)) {
+        let scrollAmount;
+        if (e.deltaMode === 0) {
+          // Touchpad: use raw deltas (optionally tweak here for your device)
+          scrollAmount = e.deltaY * 200;
+        } else {
+          // Mouse wheel: scale up for pixels
+          scrollAmount = e.deltaY * 30;
+        }
         e.preventDefault();
         e.stopPropagation();
 
-        const scrollAmount = e.deltaY * 0.8;
         const newScrollTop = Math.max(
           0,
           Math.min(
-            leftElement.scrollTop + scrollAmount,
-            leftElement.scrollHeight - leftElement.clientHeight
+            element.scrollTop + scrollAmount,
+            element.scrollHeight - element.clientHeight
           )
         );
-
-        smoothScrollTo(leftElement, newScrollTop);
+        smoothScrollTo(element, newScrollTop);
       }
+      // If at edge, let event bubble for outer scroll
     };
 
-    const handleRightPanelWheel = (e) => {
-      if (!rightElement) return;
-
-      const isScrollable =
-        rightElement.scrollHeight > rightElement.clientHeight;
-      if (!isScrollable) return;
-
-      const atTop = rightElement.scrollTop <= 0;
-      const atBottom =
-        rightElement.scrollTop >=
-        rightElement.scrollHeight - rightElement.clientHeight;
-
-      const scrollingDown = e.deltaY > 0;
-      const scrollingUp = e.deltaY < 0;
-
-      if ((scrollingDown && !atBottom) || (scrollingUp && !atTop)) {
-        e.preventDefault();
-        e.stopPropagation();
-
-        const scrollAmount = e.deltaY * 0.8;
-        const newScrollTop = Math.max(
-          0,
-          Math.min(
-            rightElement.scrollTop + scrollAmount,
-            rightElement.scrollHeight - rightElement.clientHeight
-          )
-        );
-
-        smoothScrollTo(rightElement, newScrollTop);
-      }
-    };
-
+    // Other handlers (keyboard, etc.)
     const handleKeyDown = (e) => {
       if (e.key === "ArrowUp" || e.key === "ArrowDown") {
         const activeElement = document.activeElement;
@@ -295,7 +502,6 @@ const ProductCom = () => {
           smoothScrollTo(leftElement, maxScroll);
         }
       }
-
       if (rightElement) {
         const maxScroll = rightElement.scrollHeight - rightElement.clientHeight;
         if (rightElement.scrollTop > maxScroll) {
@@ -304,11 +510,38 @@ const ProductCom = () => {
       }
     };
 
+    // Helper: Scroll to top or active item
+    const scrollToTop = (panel = "both") => {
+      if (panel === "left" || panel === "both") {
+        if (leftElement) smoothScrollTo(leftElement, 0);
+      }
+      if (panel === "right" || panel === "both") {
+        if (rightElement) smoothScrollTo(rightElement, 0);
+      }
+    };
+
+    const scrollToActiveItem = () => {
+      if (!leftElement) return;
+      const activeAccordion = leftElement.querySelector(".Mui-expanded");
+      if (activeAccordion) {
+        const containerRect = leftElement.getBoundingClientRect();
+        const itemRect = activeAccordion.getBoundingClientRect();
+        if (
+          itemRect.top < containerRect.top ||
+          itemRect.bottom > containerRect.bottom
+        ) {
+          const scrollTop =
+            activeAccordion.offsetTop - leftElement.offsetTop - 20;
+          smoothScrollTo(leftElement, scrollTop);
+        }
+      }
+    };
+
+    // Focusin handler
     const handleFocusIn = (e) => {
       if (leftElement && leftElement.contains(e.target)) {
         const elementRect = e.target.getBoundingClientRect();
         const containerRect = leftElement.getBoundingClientRect();
-
         if (
           elementRect.top < containerRect.top ||
           elementRect.bottom > containerRect.bottom
@@ -317,11 +550,9 @@ const ProductCom = () => {
           smoothScrollTo(leftElement, scrollTop);
         }
       }
-
       if (rightElement && rightElement.contains(e.target)) {
         const elementRect = e.target.getBoundingClientRect();
         const containerRect = rightElement.getBoundingClientRect();
-
         if (
           elementRect.top < containerRect.top ||
           elementRect.bottom > containerRect.bottom
@@ -333,18 +564,8 @@ const ProductCom = () => {
     };
 
     const handleStateChanges = () => {
-      if (expandedPanel) {
-        setTimeout(scrollToActiveItem, 100);
-      }
-
-      if (viewMode) {
-        scrollToTop("right");
-      }
-
-      // if (selectedCategory && !expandedPanel) {
-      //   setExpandedPanel("panel1");
-      // }
-
+      if (expandedPanel) setTimeout(scrollToActiveItem, 100);
+      if (viewMode) scrollToTop("right");
       if (selectedCategory || selectedSubcategoryId) {
         setTimeout(() => {
           scrollToTop("right");
@@ -352,18 +573,21 @@ const ProductCom = () => {
       }
     };
 
+    // Attach event listeners
     if (leftElement) {
-      leftElement.addEventListener("wheel", handleLeftPanelWheel, {
-        passive: false,
-      });
+      leftElement.addEventListener(
+        "wheel",
+        (e) => handlePanelWheel(e, leftElement),
+        { passive: false }
+      );
     }
-
     if (rightElement) {
-      rightElement.addEventListener("wheel", handleRightPanelWheel, {
-        passive: false,
-      });
+      rightElement.addEventListener(
+        "wheel",
+        (e) => handlePanelWheel(e, rightElement),
+        { passive: false }
+      );
     }
-
     document.addEventListener("keydown", handleKeyDown);
     window.addEventListener("resize", handleResize);
     document.addEventListener("focusin", handleFocusIn);
@@ -374,12 +598,13 @@ const ProductCom = () => {
 
     handleStateChanges();
 
+    // Clean up on unmount
     return () => {
       if (leftElement) {
-        leftElement.removeEventListener("wheel", handleLeftPanelWheel);
+        leftElement.removeEventListener("wheel", (e) => handlePanelWheel(e, leftElement));
       }
       if (rightElement) {
-        rightElement.removeEventListener("wheel", handleRightPanelWheel);
+        rightElement.removeEventListener("wheel", (e) => handlePanelWheel(e, rightElement));
       }
       document.removeEventListener("keydown", handleKeyDown);
       window.removeEventListener("resize", handleResize);
@@ -391,7 +616,10 @@ const ProductCom = () => {
     selectedCategory,
     selectedSubcategoryId,
     selectedProductId,
+    leftPanelRef,
+    rightPanelRef
   ]);
+
 
   const getAxiosConfig = useCallback(
     () => ({
@@ -527,6 +755,8 @@ const ProductCom = () => {
         subcategoryResponse.data.data
       ) {
         subcategoriesData = subcategoryResponse.data.data;
+        setCategoryName();
+        setSubCategoryName();
       }
 
       let directProductsData = [];
@@ -535,6 +765,8 @@ const ProductCom = () => {
           "Products fetched successfully" &&
         directProductsResponse.data.data
       ) {
+        setCategoryName();
+        setSubCategoryName();
         directProductsData = directProductsResponse.data.data
           .filter((product) => !product.subcategory_id)
           .map((product) => ({
@@ -743,6 +975,10 @@ const ProductCom = () => {
   const handleAccordionChange = (panel) => (event, isExpanded) => {
     setExpandedPanel(isExpanded ? panel : false);
 
+    setCategoryName();
+    setSubCategoryName();
+    setSelectedProduct();
+
     if (isExpanded) {
       const categoryIndex = parseInt(panel.replace("panel", "")) - 1;
       const category = categories[categoryIndex];
@@ -783,6 +1019,8 @@ const ProductCom = () => {
         response.data.message === "Product fetched successfully" &&
         response.data.data
       ) {
+        setCategoryName();
+        setSubCategoryName();
         const detailedProduct = {
           id: response.data.data.id,
           title: response.data.data.productName,
@@ -838,6 +1076,8 @@ const ProductCom = () => {
         response.data.message === "Chart fetched successfully" &&
         response.data.data
       ) {
+        setCategoryName();
+        setSubCategoryName();
         const transformedCategories = transformApiData(response.data.data);
         setCategories(transformedCategories);
         return transformedCategories;
@@ -913,6 +1153,11 @@ const ProductCom = () => {
             return a.displayOrder - b.displayOrder;
           });
 
+        setcateId(response.data.data[0]?.category.id);
+        setsubCateId(response.data.data[0]?.subcategory.id);
+        setCategoryName(response.data.data[0]?.category.name);
+        setSubCategoryName(response.data.data[0]?.subcategory.name);
+
         return transformedProducts;
       } else {
         return [];
@@ -976,6 +1221,10 @@ const ProductCom = () => {
     (subPanel, subCategory) => async (event, isExpanded) => {
       setExpandedSubPanel(isExpanded ? subPanel : false);
 
+      setCategoryName();
+      setSubCategoryName();
+      setSelectedProduct();
+
       if (isExpanded && subCategory) {
         try {
           setProductsLoading(true);
@@ -1032,6 +1281,9 @@ const ProductCom = () => {
     category,
     productData = null
   ) => {
+    setCategoryName();
+    setSubCategoryName();
+    setSelectedProduct();
     try {
       setProductDetailsLoading(true);
 
@@ -1744,16 +1996,55 @@ const ProductCom = () => {
                   viewport={{ once: true }}
                   transition={{ duration: 0.8 }}
                   ref={rightPanelRef}
-                  className="w-full md:w-full lg:w-7/12 xl:w-8/12 custom-width2 max-h-[87vh] overflow-auto  "
+                  className="w-full md:w-full lg:w-7/12 xl:w-8/12 custom-width2 max-h-[74vh] md:max-h-[87vh] overflow-auto  "
                 >
+                  <div className="flex items-center flex-wrap gap-2 text-sm">
+                    {categoryName && subCategoryName && !selectedProduct && (
+                      <>
+                        <div className="flex items-center">
+                          <span
+                            className={`px-3 py-2 rounded-lg transition-colors cursor-pointer ${
+                              // "text-[#2E437C] font-semibold bg-blue-50"
+                              "text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                            }`}
+                            onClick={() => {
+                              navigate(`/products?category=${cateId}`);
+                              setSubCategoryName();
+                            }}
+                          >
+                            {categoryName}
+                          </span>
+
+                          <HiChevronRight className="w-4 h-4 text-gray-400 mx-1" />
+                        </div>
+                        <div className="flex items-center">
+                          <span
+                            className={`px-3 py-2 rounded-lg transition-colors cursor-pointer ${
+                              // "text-[#2E437C] font-semibold bg-blue-50"
+                              "text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                            }`}
+                            onClick={() => {
+                              navigate(
+                                `/products?category=${cateId}&subcategory=${subCateId}`
+                              );
+                              setSubCategoryName();
+                              setSelectedProduct([]);
+                            }}
+                          >
+                            {subCategoryName}
+                          </span>
+                        </div>
+                      </>
+                    )}
+                  </div>
                   {viewMode === "first" && (
-                    <div>
+                    <div className="flex items-center justify-around w-full h-[80vh]">
                       <CateComponent2 />
                     </div>
                   )}
                   {viewMode === "categories" && (
                     <div>
-                      {subcategories.length > 0 && (
+                      {subcategories.filter(item => item.is_active !== false).length > 0 && (
                         <div className="mb-8">
                           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-8">
                             <h2 className="text-xl font-semibold text-[#BABEC8]">
@@ -1794,9 +2085,11 @@ const ProductCom = () => {
                                   duration: 0.5,
                                   delay: index * 0.1,
                                 }}
-                                onClick={() =>
-                                  handleDirectProductClick(product)
-                                }
+                                onClick={() => {
+                                  handleDirectProductClick(product);
+                                  setSubCategoryName();
+                                  setdetailsShowing(true);
+                                }}
                                 className="flex flex-col items-start cursor-pointer p-4"
                               >
                                 <div className="aspect-[3/3] max-w-[100%] w-full overflow-hidden">
