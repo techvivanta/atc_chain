@@ -46,7 +46,7 @@ const SubcategoryCards = ({ subcategories, onSubcategoryClick, loading }) => {
 
   return (
     <div className="grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-4 gap-6">
-      {subcategories.map((subcategory, index) => (
+      {subcategories.filter(item => item.is_active !== false).sort((a,b) => a.displayOrder - b.displayOrder).map((subcategory, index) => (
         <motion.div
           key={subcategory.id}
           initial={{ opacity: 0, scale: 0.9 }}
@@ -54,7 +54,7 @@ const SubcategoryCards = ({ subcategories, onSubcategoryClick, loading }) => {
           viewport={{ once: true }}
           transition={{ duration: 0.5, delay: index * 0.1 }}
           onClick={() => onSubcategoryClick(subcategory)}
-          className="flex flex-col items-start text-start cursor-pointer bg-white"
+          className={subcategory.is_active === false ? "d-none" : "flex flex-col items-start text-start cursor-pointer bg-white"}
         >
           <div className="aspect-[4/4] w-full overflow-hidden">
             <motion.img

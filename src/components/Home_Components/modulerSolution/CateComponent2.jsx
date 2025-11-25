@@ -157,7 +157,7 @@ export default function CateComponent2() {
             whileInView="visible"
             viewport={{ once: true, margin: "-60px" }}
             variants={cardGridVariants}
-            className="grid grid-cols-2 custom-gap sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4 md:gap-6 text-center"
+            className="grid grid-cols-2 custom-gap sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-6 w-full"
           >
             {solutions.map((item, idx) => (
               <motion.div
