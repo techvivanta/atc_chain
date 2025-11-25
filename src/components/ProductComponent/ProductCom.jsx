@@ -606,8 +606,6 @@ const ProductCom = () => {
     const leftElement = leftPanelRef.current;
     const rightElement = rightPanelRef.current;
 
-    console.log('Scroll effect running, elements:', { leftElement, rightElement });
-
     if (!leftElement && !rightElement) return;
 
     // Store handler references for proper cleanup
@@ -626,7 +624,6 @@ const ProductCom = () => {
       
       const isScrollable = element.scrollHeight > element.clientHeight;
       if (!isScrollable) {
-        console.log('Element not scrollable');
         return;
       }
 
@@ -634,18 +631,6 @@ const ProductCom = () => {
       const atBottom = element.scrollTop + element.clientHeight >= element.scrollHeight - 1;
       const scrollingDown = e.deltaY > 0;
       const scrollingUp = e.deltaY < 0;
-
-      console.log('Wheel event:', {
-        deltaY: e.deltaY,
-        deltaMode: e.deltaMode,
-        scrollingDown,
-        scrollingUp,
-        atTop,
-        atBottom,
-        scrollTop: element.scrollTop,
-        clientHeight: element.clientHeight,
-        scrollHeight: element.scrollHeight
-      });
 
       const canScrollInternally = (scrollingDown && !atBottom) || (scrollingUp && !atTop);
 
@@ -664,11 +649,8 @@ const ProductCom = () => {
         }
 
         const newScrollTop = element.scrollTop + scrollAmount;
-        console.log('Scrolling to:', newScrollTop);
         
         element.scrollTop = newScrollTop;
-      } else {
-        console.log('At edge, allowing event to bubble');
       }
     };
 
@@ -716,14 +698,12 @@ const ProductCom = () => {
         passive: false,
         capture: true 
       });
-      console.log('Added wheel listener to left panel');
     }
     if (rightElement) {
       rightElement.addEventListener("wheel", rightWheelHandler, { 
         passive: false,
         capture: true 
       });
-      console.log('Added wheel listener to right panel');
     }
     
     document.addEventListener("keydown", handleKeyDown);
@@ -733,25 +713,17 @@ const ProductCom = () => {
     const testScroll = () => {
       if (leftElement) {
         leftElement.scrollTop += 100;
-        console.log('Test scroll executed, new scrollTop:', leftElement.scrollTop);
       }
     };
 
     // Add test button to DOM temporarily
     const testButton = document.createElement('button');
-    testButton.textContent = 'Test Scroll';
-    testButton.style.position = 'fixed';
-    testButton.style.top = '10px';
-    testButton.style.right = '10px';
-    testButton.style.zIndex = '10000';
-    testButton.onclick = testScroll;
+    testButton.textContent = '';
     document.body.appendChild(testButton);
 
-    console.log('Scroll handlers setup complete');
 
     // Clean up on unmount
     return () => {
-      console.log('Cleaning up scroll handlers');
       
       if (leftElement) {
         leftElement.removeEventListener("wheel", leftWheelHandler, { capture: true });
