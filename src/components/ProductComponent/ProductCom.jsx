@@ -398,68 +398,281 @@ const ProductCom = () => {
   //   selectedProductId,
   // ]);
 
+  // useEffect(() => {
+  //   const leftElement = leftPanelRef.current;
+  //   const rightElement = rightPanelRef.current;
+
+  //   // Smooth scroll function
+  //   const smoothScrollTo = (element, targetScrollTop) => {
+  //     if (!element) return;
+  //     const startScrollTop = element.scrollTop;
+  //     const distance = targetScrollTop - startScrollTop;
+  //     const duration = 300;
+  //     let startTime = null;
+
+  //     const animateScroll = (currentTime) => {
+  //       if (startTime === null) startTime = currentTime;
+  //       const timeElapsed = currentTime - startTime;
+  //       const progress = Math.min(timeElapsed / duration, 1);
+  //       const ease = 1 - Math.pow(1 - progress, 3);
+  //       element.scrollTop = startScrollTop + distance * ease;
+  //       if (progress < 1) {
+  //         requestAnimationFrame(animateScroll);
+  //       }
+  //     };
+
+  //     requestAnimationFrame(animateScroll);
+  //   };
+
+  //   // Shared logic for both panels
+  //   const handlePanelWheel = (e, element) => {
+  //     if (!element) return;
+
+  //     const isScrollable = element.scrollHeight > element.clientHeight;
+  //     if (!isScrollable) return;
+
+  //     e.preventDefault();
+  //     e.stopPropagation();
+
+  //     // Direct scroll without animation for testing
+  //     element.scrollTop += e.deltaY * (e.deltaMode === 0 ? 1 : 40);
+  //   };
+
+  //   // Other handlers (keyboard, etc.)
+  //   const handleKeyDown = (e) => {
+  //     if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+  //       const activeElement = document.activeElement;
+  //       let targetElement = null;
+
+  //       if (leftElement && leftElement.contains(activeElement)) {
+  //         targetElement = leftElement;
+  //       } else if (rightElement && rightElement.contains(activeElement)) {
+  //         targetElement = rightElement;
+  //       }
+
+  //       if (targetElement) {
+  //         e.preventDefault();
+  //         const scrollAmount = e.key === "ArrowDown" ? 50 : -50;
+  //         const newScrollTop = Math.max(
+  //           0,
+  //           Math.min(
+  //             targetElement.scrollTop + scrollAmount,
+  //             targetElement.scrollHeight - targetElement.clientHeight
+  //           )
+  //         );
+  //         smoothScrollTo(targetElement, newScrollTop);
+  //       }
+  //     }
+
+  //     if (e.key === "Home" || e.key === "End") {
+  //       if (rightElement && rightElement.contains(document.activeElement)) {
+  //         e.preventDefault();
+  //         const targetScrollTop =
+  //           e.key === "Home" ? 0 : rightElement.scrollHeight;
+  //         smoothScrollTo(rightElement, targetScrollTop);
+  //       }
+  //     }
+  //   };
+
+  //   const handleResize = () => {
+  //     if (leftElement) {
+  //       const maxScroll = leftElement.scrollHeight - leftElement.clientHeight;
+  //       if (leftElement.scrollTop > maxScroll) {
+  //         smoothScrollTo(leftElement, maxScroll);
+  //       }
+  //     }
+  //     if (rightElement) {
+  //       const maxScroll = rightElement.scrollHeight - rightElement.clientHeight;
+  //       if (rightElement.scrollTop > maxScroll) {
+  //         smoothScrollTo(rightElement, maxScroll);
+  //       }
+  //     }
+  //   };
+
+  //   // Helper: Scroll to top or active item
+  //   const scrollToTop = (panel = "both") => {
+  //     if (panel === "left" || panel === "both") {
+  //       if (leftElement) smoothScrollTo(leftElement, 0);
+  //     }
+  //     if (panel === "right" || panel === "both") {
+  //       if (rightElement) smoothScrollTo(rightElement, 0);
+  //     }
+  //   };
+
+  //   const scrollToActiveItem = () => {
+  //     if (!leftElement) return;
+  //     const activeAccordion = leftElement.querySelector(".Mui-expanded");
+  //     if (activeAccordion) {
+  //       const containerRect = leftElement.getBoundingClientRect();
+  //       const itemRect = activeAccordion.getBoundingClientRect();
+  //       if (
+  //         itemRect.top < containerRect.top ||
+  //         itemRect.bottom > containerRect.bottom
+  //       ) {
+  //         const scrollTop =
+  //           activeAccordion.offsetTop - leftElement.offsetTop - 20;
+  //         smoothScrollTo(leftElement, scrollTop);
+  //       }
+  //     }
+  //   };
+
+  //   // Focusin handler
+  //   const handleFocusIn = (e) => {
+  //     if (leftElement && leftElement.contains(e.target)) {
+  //       const elementRect = e.target.getBoundingClientRect();
+  //       const containerRect = leftElement.getBoundingClientRect();
+  //       if (
+  //         elementRect.top < containerRect.top ||
+  //         elementRect.bottom > containerRect.bottom
+  //       ) {
+  //         const scrollTop = e.target.offsetTop - leftElement.offsetTop - 50;
+  //         smoothScrollTo(leftElement, scrollTop);
+  //       }
+  //     }
+  //     if (rightElement && rightElement.contains(e.target)) {
+  //       const elementRect = e.target.getBoundingClientRect();
+  //       const containerRect = rightElement.getBoundingClientRect();
+  //       if (
+  //         elementRect.top < containerRect.top ||
+  //         elementRect.bottom > containerRect.bottom
+  //       ) {
+  //         const scrollTop = e.target.offsetTop - rightElement.offsetTop - 50;
+  //         smoothScrollTo(rightElement, scrollTop);
+  //       }
+  //     }
+  //   };
+
+  //   const handleStateChanges = () => {
+  //     if (expandedPanel) setTimeout(scrollToActiveItem, 100);
+  //     if (viewMode) scrollToTop("right");
+  //     if (selectedCategory || selectedSubcategoryId) {
+  //       setTimeout(() => {
+  //         scrollToTop("right");
+  //       }, 150);
+  //     }
+  //   };
+
+  //   // Attach event listeners
+  //   if (leftElement) {
+  //     leftElement.addEventListener(
+  //       "wheel",
+  //       (e) => handlePanelWheel(e, leftElement),
+  //       { passive: false }
+  //     );
+  //   }
+  //   if (rightElement) {
+  //     rightElement.addEventListener(
+  //       "wheel",
+  //       (e) => handlePanelWheel(e, rightElement),
+  //       { passive: false }
+  //     );
+  //   }
+  //   document.addEventListener("keydown", handleKeyDown);
+  //   window.addEventListener("resize", handleResize);
+  //   document.addEventListener("focusin", handleFocusIn);
+
+  //   setTimeout(() => {
+  //     scrollToTop("both");
+  //   }, 100);
+
+  //   handleStateChanges();
+
+  //   // Clean up on unmount
+  //   return () => {
+  //     if (leftElement) {
+  //       leftElement.removeEventListener("wheel", (e) =>
+  //         handlePanelWheel(e, leftElement)
+  //       );
+  //     }
+  //     if (rightElement) {
+  //       rightElement.removeEventListener("wheel", (e) =>
+  //         handlePanelWheel(e, rightElement)
+  //       );
+  //     }
+  //     document.removeEventListener("keydown", handleKeyDown);
+  //     window.removeEventListener("resize", handleResize);
+  //     document.removeEventListener("focusin", handleFocusIn);
+  //   };
+  // }, [
+  //   expandedPanel,
+  //   viewMode,
+  //   selectedCategory,
+  //   selectedSubcategoryId,
+  //   selectedProductId,
+  //   leftPanelRef,
+  //   rightPanelRef,
+  // ]);
   useEffect(() => {
     const leftElement = leftPanelRef.current;
     const rightElement = rightPanelRef.current;
 
-    // Smooth scroll function
-    const smoothScrollTo = (element, targetScrollTop) => {
+    console.log('Scroll effect running, elements:', { leftElement, rightElement });
+
+    if (!leftElement && !rightElement) return;
+
+    // Store handler references for proper cleanup
+    const leftWheelHandler = (e) => handlePanelWheel(e, leftElement);
+    const rightWheelHandler = (e) => handlePanelWheel(e, rightElement);
+
+    // Simple scroll function without animation for testing
+    const scrollTo = (element, targetScrollTop) => {
       if (!element) return;
-      const startScrollTop = element.scrollTop;
-      const distance = targetScrollTop - startScrollTop;
-      const duration = 300;
-      let startTime = null;
-
-      const animateScroll = (currentTime) => {
-        if (startTime === null) startTime = currentTime;
-        const timeElapsed = currentTime - startTime;
-        const progress = Math.min(timeElapsed / duration, 1);
-        const ease = 1 - Math.pow(1 - progress, 3);
-        element.scrollTop = startScrollTop + distance * ease;
-        if (progress < 1) {
-          requestAnimationFrame(animateScroll);
-        }
-      };
-
-      requestAnimationFrame(animateScroll);
+      element.scrollTop = targetScrollTop;
     };
 
-    // Shared logic for both panels
+    // Debug wheel handler
     const handlePanelWheel = (e, element) => {
       if (!element) return;
+      
       const isScrollable = element.scrollHeight > element.clientHeight;
-      if (!isScrollable) return;
+      if (!isScrollable) {
+        console.log('Element not scrollable');
+        return;
+      }
 
       const atTop = element.scrollTop <= 0;
-      const atBottom = element.scrollTop >= element.scrollHeight - element.clientHeight;
+      const atBottom = element.scrollTop + element.clientHeight >= element.scrollHeight - 1;
       const scrollingDown = e.deltaY > 0;
       const scrollingUp = e.deltaY < 0;
 
-      if ((scrollingDown && !atBottom) || (scrollingUp && !atTop)) {
-        let scrollAmount;
-        if (e.deltaMode === 0) {
-          // Touchpad: use raw deltas (optionally tweak here for your device)
-          scrollAmount = e.deltaY * 200;
-        } else {
-          // Mouse wheel: scale up for pixels
-          scrollAmount = e.deltaY * 30;
-        }
+      console.log('Wheel event:', {
+        deltaY: e.deltaY,
+        deltaMode: e.deltaMode,
+        scrollingDown,
+        scrollingUp,
+        atTop,
+        atBottom,
+        scrollTop: element.scrollTop,
+        clientHeight: element.clientHeight,
+        scrollHeight: element.scrollHeight
+      });
+
+      const canScrollInternally = (scrollingDown && !atBottom) || (scrollingUp && !atTop);
+
+      if (canScrollInternally) {
         e.preventDefault();
         e.stopPropagation();
+        e.stopImmediatePropagation();
 
-        const newScrollTop = Math.max(
-          0,
-          Math.min(
-            element.scrollTop + scrollAmount,
-            element.scrollHeight - element.clientHeight
-          )
-        );
-        smoothScrollTo(element, newScrollTop);
+        let scrollAmount;
+        if (e.deltaMode === 0) {
+          // Pixel mode (touchpad) - use smaller multiplier
+          scrollAmount = e.deltaY * 0.8;
+        } else {
+          // Line mode (mouse wheel)
+          scrollAmount = e.deltaY * 15;
+        }
+
+        const newScrollTop = element.scrollTop + scrollAmount;
+        console.log('Scrolling to:', newScrollTop);
+        
+        element.scrollTop = newScrollTop;
+      } else {
+        console.log('At edge, allowing event to bubble');
       }
-      // If at edge, let event bubble for outer scroll
     };
 
-    // Other handlers (keyboard, etc.)
+    // Keyboard handler
     const handleKeyDown = (e) => {
       if (e.key === "ArrowUp" || e.key === "ArrowDown") {
         const activeElement = document.activeElement;
@@ -474,153 +687,87 @@ const ProductCom = () => {
         if (targetElement) {
           e.preventDefault();
           const scrollAmount = e.key === "ArrowDown" ? 50 : -50;
-          const newScrollTop = Math.max(
-            0,
-            Math.min(
-              targetElement.scrollTop + scrollAmount,
-              targetElement.scrollHeight - targetElement.clientHeight
-            )
-          );
-          smoothScrollTo(targetElement, newScrollTop);
-        }
-      }
-
-      if (e.key === "Home" || e.key === "End") {
-        if (rightElement && rightElement.contains(document.activeElement)) {
-          e.preventDefault();
-          const targetScrollTop =
-            e.key === "Home" ? 0 : rightElement.scrollHeight;
-          smoothScrollTo(rightElement, targetScrollTop);
+          targetElement.scrollTop += scrollAmount;
         }
       }
     };
 
-    const handleResize = () => {
-      if (leftElement) {
-        const maxScroll = leftElement.scrollHeight - leftElement.clientHeight;
-        if (leftElement.scrollTop > maxScroll) {
-          smoothScrollTo(leftElement, maxScroll);
-        }
-      }
-      if (rightElement) {
-        const maxScroll = rightElement.scrollHeight - rightElement.clientHeight;
-        if (rightElement.scrollTop > maxScroll) {
-          smoothScrollTo(rightElement, maxScroll);
-        }
-      }
-    };
-
-    // Helper: Scroll to top or active item
-    const scrollToTop = (panel = "both") => {
-      if (panel === "left" || panel === "both") {
-        if (leftElement) smoothScrollTo(leftElement, 0);
-      }
-      if (panel === "right" || panel === "both") {
-        if (rightElement) smoothScrollTo(rightElement, 0);
-      }
-    };
-
-    const scrollToActiveItem = () => {
-      if (!leftElement) return;
-      const activeAccordion = leftElement.querySelector(".Mui-expanded");
-      if (activeAccordion) {
-        const containerRect = leftElement.getBoundingClientRect();
-        const itemRect = activeAccordion.getBoundingClientRect();
-        if (
-          itemRect.top < containerRect.top ||
-          itemRect.bottom > containerRect.bottom
-        ) {
-          const scrollTop =
-            activeAccordion.offsetTop - leftElement.offsetTop - 20;
-          smoothScrollTo(leftElement, scrollTop);
-        }
-      }
-    };
-
-    // Focusin handler
+    // Focus handler
     const handleFocusIn = (e) => {
-      if (leftElement && leftElement.contains(e.target)) {
+      [leftElement, rightElement].forEach(element => {
+        if (!element || !element.contains(e.target)) return;
+        
         const elementRect = e.target.getBoundingClientRect();
-        const containerRect = leftElement.getBoundingClientRect();
+        const containerRect = element.getBoundingClientRect();
+        
         if (
           elementRect.top < containerRect.top ||
           elementRect.bottom > containerRect.bottom
         ) {
-          const scrollTop = e.target.offsetTop - leftElement.offsetTop - 50;
-          smoothScrollTo(leftElement, scrollTop);
+          const scrollTop = Math.max(0, e.target.offsetTop - element.offsetTop - 20);
+          element.scrollTop = scrollTop;
         }
-      }
-      if (rightElement && rightElement.contains(e.target)) {
-        const elementRect = e.target.getBoundingClientRect();
-        const containerRect = rightElement.getBoundingClientRect();
-        if (
-          elementRect.top < containerRect.top ||
-          elementRect.bottom > containerRect.bottom
-        ) {
-          const scrollTop = e.target.offsetTop - rightElement.offsetTop - 50;
-          smoothScrollTo(rightElement, scrollTop);
-        }
-      }
+      });
     };
 
-    const handleStateChanges = () => {
-      if (expandedPanel) setTimeout(scrollToActiveItem, 100);
-      if (viewMode) scrollToTop("right");
-      if (selectedCategory || selectedSubcategoryId) {
-        setTimeout(() => {
-          scrollToTop("right");
-        }, 150);
-      }
-    };
-
-    // Attach event listeners
+    // Attach event listeners with capture phase
     if (leftElement) {
-      leftElement.addEventListener(
-        "wheel",
-        (e) => handlePanelWheel(e, leftElement),
-        { passive: false }
-      );
+      leftElement.addEventListener("wheel", leftWheelHandler, { 
+        passive: false,
+        capture: true 
+      });
+      console.log('Added wheel listener to left panel');
     }
     if (rightElement) {
-      rightElement.addEventListener(
-        "wheel",
-        (e) => handlePanelWheel(e, rightElement),
-        { passive: false }
-      );
+      rightElement.addEventListener("wheel", rightWheelHandler, { 
+        passive: false,
+        capture: true 
+      });
+      console.log('Added wheel listener to right panel');
     }
+    
     document.addEventListener("keydown", handleKeyDown);
-    window.addEventListener("resize", handleResize);
     document.addEventListener("focusin", handleFocusIn);
 
-    setTimeout(() => {
-      scrollToTop("both");
-    }, 100);
+    // Test: Add a temporary test button
+    const testScroll = () => {
+      if (leftElement) {
+        leftElement.scrollTop += 100;
+        console.log('Test scroll executed, new scrollTop:', leftElement.scrollTop);
+      }
+    };
 
-    handleStateChanges();
+    // Add test button to DOM temporarily
+    const testButton = document.createElement('button');
+    testButton.textContent = 'Test Scroll';
+    testButton.style.position = 'fixed';
+    testButton.style.top = '10px';
+    testButton.style.right = '10px';
+    testButton.style.zIndex = '10000';
+    testButton.onclick = testScroll;
+    document.body.appendChild(testButton);
+
+    console.log('Scroll handlers setup complete');
 
     // Clean up on unmount
     return () => {
+      console.log('Cleaning up scroll handlers');
+      
       if (leftElement) {
-        leftElement.removeEventListener("wheel", (e) => handlePanelWheel(e, leftElement));
+        leftElement.removeEventListener("wheel", leftWheelHandler, { capture: true });
       }
       if (rightElement) {
-        rightElement.removeEventListener("wheel", (e) => handlePanelWheel(e, rightElement));
+        rightElement.removeEventListener("wheel", rightWheelHandler, { capture: true });
       }
       document.removeEventListener("keydown", handleKeyDown);
-      window.removeEventListener("resize", handleResize);
       document.removeEventListener("focusin", handleFocusIn);
+      
+      // Remove test button
+      if (document.body.contains(testButton)) {
+        document.body.removeChild(testButton);
+      }
     };
-  }, [
-    expandedPanel,
-    viewMode,
-    selectedCategory,
-    selectedSubcategoryId,
-    selectedProductId,
-    leftPanelRef,
-    rightPanelRef
-  ]);
-
-
+  }, [leftPanelRef.current, rightPanelRef.current]); // Simplified dependencies
   const getAxiosConfig = useCallback(
     () => ({
       headers: {
@@ -1446,6 +1593,7 @@ const ProductCom = () => {
                   transition={{ duration: 0.7 }}
                   ref={leftPanelRef}
                   className="w-full md:w-full lg:w-5/12 xl:w-4/12 custom-width max-h-[87vh] overflow-y-auto overflow-x-hidden"
+                 
                 >
                   <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-5">
                     <h1 className="text-[36px] font-[700] text-[#BABEC8]">
@@ -2044,7 +2192,8 @@ const ProductCom = () => {
                   )}
                   {viewMode === "categories" && (
                     <div>
-                      {subcategories.filter(item => item.is_active !== false).length > 0 && (
+                      {subcategories.filter((item) => item.is_active !== false)
+                        .length > 0 && (
                         <div className="mb-8">
                           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-8">
                             <h2 className="text-xl font-semibold text-[#BABEC8]">
