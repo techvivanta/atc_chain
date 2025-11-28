@@ -15,7 +15,7 @@ const AnimatedButton = ({
 
   return (
     <button
-      className={`relative cursor-pointer  inline-flex items-center   font-medium px-${px} py-${py} rounded-full overflow-hidden transition-all duration-[600ms] ease-in-out group `}
+      className={`relative cursor-pointer  inline-flex items-center active:scale-50 font-medium px-${px} py-${py} rounded-full overflow-hidden transition-all duration-[600ms] ease-in-out group `}
       
       style={{
          color: isHovered ? "white" : color,
