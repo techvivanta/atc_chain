@@ -279,6 +279,7 @@ const ProductCom = () => {
       }
     };
   }, [leftPanelRef.current, rightPanelRef.current]); // Simplified dependencies
+
   const getAxiosConfig = useCallback(
     () => ({
       headers: {
@@ -484,7 +485,7 @@ const ProductCom = () => {
         setParentCategory(category.category || category.title);
         setExpandedPanel(`panel${categories.indexOf(category) + 1}`);
 
-        if (filters.product) {
+        if (filters.product && viewMode === "first") {
           setSelectedProductId(filters.product);
           setSelectedSubcategoryId(filters.subcategory || null);
           await handleProductByUrl(
@@ -492,11 +493,11 @@ const ProductCom = () => {
             category,
             filters.subcategory
           );
-        } else if (filters.subcategory) {
+        } else if (filters.subcategory && viewMode === "first") {
           setSelectedSubcategoryId(filters.subcategory);
           setSelectedProductId(null);
           await handleSubcategoryByUrl(filters.subcategory, category);
-        } else {
+        } else if (filters.category && viewMode === "first") {
           setSelectedSubcategoryId(null);
           setSelectedProductId(null);
           await fetchSubcategoriesAndDirectProducts(category.id);
@@ -724,6 +725,7 @@ const ProductCom = () => {
   const fetchCategories = async () => {
     try {
       setError(null);
+      setLoading(true);
 
       const response = await axios.get(
         `${import.meta.env.VITE_BACKEND_URL}/product/chart`,
@@ -755,6 +757,8 @@ const ProductCom = () => {
         setError(err.message);
       }
       throw err;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -1019,6 +1023,7 @@ const ProductCom = () => {
 
   const handleProductClick = async (product) => {
     try {
+      setProductDetailsLoading(true);
       const detailedProduct = await fetchProductDetails(product.id);
 
       if (detailedProduct) {
@@ -1041,6 +1046,8 @@ const ProductCom = () => {
       }
     } catch (error) {
       setError("Error loading product details");
+    } finally {
+      setProductDetailsLoading(false);
     }
   };
 
@@ -1087,6 +1094,10 @@ const ProductCom = () => {
       </div>
     );
   }
+
+  useEffect(() => {
+    console.log(subCategoryName);
+  }, [subCategoryName]);
 
   return (
     <>
@@ -1657,43 +1668,99 @@ const ProductCom = () => {
                   className="w-full md:w-full lg:w-7/12 xl:w-8/12 custom-width2 max-h-[74vh] md:max-h-[87vh] overflow-auto  "
                 >
                   <div className="flex items-center flex-wrap gap-2 text-sm">
-                    {categoryName && subCategoryName && !selectedProduct && (
-                      <>
-                        <div className="flex items-center">
-                          <span
-                            className={`px-3 py-2 rounded-lg transition-colors cursor-pointer ${
-                              // "text-[#2E437C] font-semibold bg-blue-50"
-                              "text-gray-700 hover:text-gray-900 hover:bg-gray-50"
-                            }`}
-                            onClick={() => {
-                              navigate(`/products?category=${cateId}`);
-                              setSubCategoryName();
-                            }}
-                          >
-                            {categoryName}
-                          </span>
+                    {categoryName &&
+                      subCategoryName &&
+                      !selectedProduct?.title && (
+                        <>
+                          <div className="flex items-center">
+                            <span
+                              className={`px-3 py-2 rounded-lg transition-colors cursor-pointer ${
+                                // "text-[#2E437C] font-semibold bg-blue-50"
+                                "text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                              }`}
+                              onClick={() => {
+                                setSubCategoryName();
+                                setViewMode("first");
+                                navigate(`/products?category=${cateId}`);
+                              }}
+                            >
+                              {categoryName}
+                            </span>
 
-                          <HiChevronRight className="w-4 h-4 text-gray-400 mx-1" />
-                        </div>
-                        <div className="flex items-center">
-                          <span
-                            className={`px-3 py-2 rounded-lg transition-colors cursor-pointer ${
-                              "text-[#2E437C] font-semibold bg-blue-50"
-                              // "text-gray-700 hover:text-gray-900 hover:bg-gray-50"
-                            }`}
-                            onClick={() => {
-                              navigate(
-                                `/products?category=${cateId}&subcategory=${subCateId}`
-                              );
-                              setSubCategoryName();
-                              setSelectedProduct([]);
-                            }}
-                          >
-                            {subCategoryName}
-                          </span>
-                        </div>
-                      </>
-                    )}
+                            <HiChevronRight className="w-4 h-4 text-gray-400 mx-1" />
+                          </div>
+                          <div className="flex items-center">
+                            <span
+                              className={`px-3 py-2 rounded-lg transition-colors cursor-pointer ${
+                                "text-[#2E437C] font-semibold bg-blue-50"
+                                // "text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                              }`}
+                              onClick={() => {
+                                navigate(
+                                  `/products?category=${cateId}&subcategory=${subCateId}`
+                                );
+                                // setSubCategoryName();
+                                setSelectedProduct([]);
+                              }}
+                            >
+                              {subCategoryName}
+                            </span>
+                          </div>
+                        </>
+                      )}
+
+                    {categoryName &&
+                      subCategoryName &&
+                      selectedProduct?.title && (
+                        <>
+                          <div className="flex items-center">
+                            <span
+                              className={`px-3 py-2 rounded-lg transition-colors cursor-pointer ${
+                                // "text-[#2E437C] font-semibold bg-blue-50"
+                                "text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                              }`}
+                              onClick={() => {
+                                navigate(`/products?category=${cateId}`);
+                                setSubCategoryName();
+                              }}
+                            >
+                              {categoryName}
+                            </span>
+
+                            <HiChevronRight className="w-4 h-4 text-gray-400 mx-1" />
+                          </div>
+                          <div className="flex items-center">
+                            <span
+                              className={`px-3 py-2 rounded-lg transition-colors cursor-pointer ${
+                                // "text-[#2E437C] font-semibold bg-blue-50"
+                                "text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                              }`}
+                              onClick={() => {
+                                setSelectedProduct([]);
+                                navigate(
+                                  `/products?category=${cateId}&subcategory=${subCateId}`
+                                );
+                                // setSubCategoryName();
+                              }}
+                            >
+                              {subCategoryName}
+                            </span>
+
+                            <HiChevronRight className="w-4 h-4 text-gray-400 mx-1" />
+                          </div>
+
+                          <div className="flex items-center">
+                            <span
+                              className={`px-3 py-2 rounded-lg transition-colors cursor-pointer ${
+                                "text-[#2E437C] font-semibold bg-blue-50"
+                                // "text-gray-700 hover:text-gray-900 hover:bg-gray-50"
+                              }`}
+                            >
+                              {selectedProduct.title}
+                            </span>
+                          </div>
+                        </>
+                      )}
                   </div>
                   {viewMode === "first" && (
                     <div className="flex items-center justify-around w-full h-[80vh]">

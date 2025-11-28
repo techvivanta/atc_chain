@@ -157,7 +157,7 @@ export default function CateComponent2() {
             whileInView="visible"
             viewport={{ once: true, margin: "-60px" }}
             variants={cardGridVariants}
-            className="grid grid-cols-2 custom-gap sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-6 w-full"
+            className="grid grid-cols-2 custom-gap sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-4 md:gap-6 w-full h-[35rem]"
           >
             {solutions.map((item, idx) => (
               <motion.div
@@ -179,12 +179,8 @@ export default function CateComponent2() {
                   transition: { duration: 0.1 },
                 }}
                 className="group relative flex flex-col items-center justify-center p-2 bg-white
-          cursor-pointer overflow-hidden hover:shadow-lg"
+          cursor-pointer overflow-hidden hover:shadow-lg hover:bg-[#1d3b72]"
               >
-                <motion.div
-                  className="absolute inset-0 bg-gradient-to-br from-[#2E437C] to-[#1d3b72]
-           opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                />
 
                 {/* Icon without any continuous animation */}
                 <div className="relative z-10 w-12 h-12 sm:w-14 sm:h-14 mb-3 flex items-center justify-center">
@@ -219,11 +215,7 @@ export default function CateComponent2() {
                 </motion.p>
 
                 {/* Bottom Border */}
-                <motion.div
-                  className="absolute bottom-0 left-0 right-0 h-0.5 bg-gradient-to-r
-           from-[#2E437C] to-[#1d3b72]
-           opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                />
+               
               </motion.div>
             ))}
           </motion.div>

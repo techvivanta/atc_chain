@@ -147,7 +147,7 @@ const ProductDetails = ({ selectedProduct }) => {
   };
 
   const images = getImages();
-  
+
   useEffect(() => {
     if (thumbnailContainerRef.current) {
       const container = thumbnailContainerRef.current;
@@ -161,7 +161,10 @@ const ProductDetails = ({ selectedProduct }) => {
     const files = [];
 
     // Handle documents from selectedProduct - NEW LOGIC FOR YOUR API RESPONSE
-    if (selectedProduct?.documents && Array.isArray(selectedProduct.documents)) {
+    if (
+      selectedProduct?.documents &&
+      Array.isArray(selectedProduct.documents)
+    ) {
       selectedProduct.documents.forEach((doc, index) => {
         if (doc && typeof doc === "string") {
           const fileName = doc.split("/").pop() || `document_${index + 1}`;
@@ -251,7 +254,8 @@ const ProductDetails = ({ selectedProduct }) => {
     const categoryName =
       selectedProduct.category?.name || selectedProduct.apiData?.category?.name;
     const subcategoryName =
-      selectedProduct.subcategory?.name || selectedProduct.apiData?.subcategory?.name;
+      selectedProduct.subcategory?.name ||
+      selectedProduct.apiData?.subcategory?.name;
     const productName = selectedProduct.title || selectedProduct.productName;
 
     // Get current URL parameters for navigation
@@ -266,6 +270,7 @@ const ProductDetails = ({ selectedProduct }) => {
           const params = new URLSearchParams();
           if (currentCategory) params.set("category", currentCategory);
           navigate(`/products?${params.toString()}`);
+          window.location.reload();
         },
       });
     }
@@ -279,6 +284,7 @@ const ProductDetails = ({ selectedProduct }) => {
           if (currentCategory) params.set("category", currentCategory);
           if (currentSubcategory) params.set("subcategory", currentSubcategory);
           navigate(`/products?${params.toString()}`);
+          window.location.reload();
         },
       });
     }
@@ -555,33 +561,32 @@ const ProductDetails = ({ selectedProduct }) => {
     url: selectedProduct.url,
   };
 
-  console.log(selectedProduct.description);
-
   function addDistClasses(html) {
-  return html
-    // For <h1> ... </h1>
-    .replace(/<h1(?![^>]*class=)/g, '<h1 class="dist-h1"')
-    .replace(/<h1([^>]*)class="([^"]*)"/g, '<h1$1class="dist-h1 $2"')
-    // For <h2>
-    .replace(/<h2(?![^>]*class=)/g, '<h2 class="dist-h2"')
-    .replace(/<h2([^>]*)class="([^"]*)"/g, '<h2$1class="dist-h2 $2"')
-    // For <h3>
-    .replace(/<h3(?![^>]*class=)/g, '<h3 class="dist-h3"')
-    .replace(/<h3([^>]*)class="([^"]*)"/g, '<h3$1class="dist-h3 $2"')
-    // For <p>
-    .replace(/<p(?![^>]*class=)/g, '<p class="dist-p"')
-    .replace(/<p([^>]*)class="([^"]*)"/g, '<p$1class="dist-p $2"')
-    // For <ul>
-    .replace(/<ul(?![^>]*class=)/g, '<ul class="dist-ul"')
-    .replace(/<ul([^>]*)class="([^"]*)"/g, '<ul$1class="dist-ul $2"')
-    // For <ol>
-    .replace(/<ol(?![^>]*class=)/g, '<ol class="dist-ol"')
-    .replace(/<ol([^>]*)class="([^"]*)"/g, '<ol$1class="dist-ol $2"')
-    // For <li>
-    .replace(/<li(?![^>]*class=)/g, '<li class="dist-li"')
-    .replace(/<li([^>]*)class="([^"]*)"/g, '<li$1class="dist-li $2"');
-}
-  
+    return (
+      html
+        // For <h1> ... </h1>
+        .replace(/<h1(?![^>]*class=)/g, '<h1 class="dist-h1"')
+        .replace(/<h1([^>]*)class="([^"]*)"/g, '<h1$1class="dist-h1 $2"')
+        // For <h2>
+        .replace(/<h2(?![^>]*class=)/g, '<h2 class="dist-h2"')
+        .replace(/<h2([^>]*)class="([^"]*)"/g, '<h2$1class="dist-h2 $2"')
+        // For <h3>
+        .replace(/<h3(?![^>]*class=)/g, '<h3 class="dist-h3"')
+        .replace(/<h3([^>]*)class="([^"]*)"/g, '<h3$1class="dist-h3 $2"')
+        // For <p>
+        .replace(/<p(?![^>]*class=)/g, '<p class="dist-p"')
+        .replace(/<p([^>]*)class="([^"]*)"/g, '<p$1class="dist-p $2"')
+        // For <ul>
+        .replace(/<ul(?![^>]*class=)/g, '<ul class="dist-ul"')
+        .replace(/<ul([^>]*)class="([^"]*)"/g, '<ul$1class="dist-ul $2"')
+        // For <ol>
+        .replace(/<ol(?![^>]*class=)/g, '<ol class="dist-ol"')
+        .replace(/<ol([^>]*)class="([^"]*)"/g, '<ol$1class="dist-ol $2"')
+        // For <li>
+        .replace(/<li(?![^>]*class=)/g, '<li class="dist-li"')
+        .replace(/<li([^>]*)class="([^"]*)"/g, '<li$1class="dist-li $2"')
+    );
+  }
 
   return (
     <div className="w-full bg-white">
@@ -699,7 +704,12 @@ const ProductDetails = ({ selectedProduct }) => {
                           },
                         }}
                       >
-                        <span style={{ overflow: "hidden", textOverflow: "ellipsis" }}>
+                        <span
+                          style={{
+                            overflow: "hidden",
+                            textOverflow: "ellipsis",
+                          }}
+                        >
                           Downloads ({downloadFiles.length})
                         </span>
                       </Button>
@@ -732,7 +742,9 @@ const ProductDetails = ({ selectedProduct }) => {
                               boxShadow: 3,
                             }}
                           >
-                            <ClickAwayListener onClickAway={handleDownloadMenuClose}>
+                            <ClickAwayListener
+                              onClickAway={handleDownloadMenuClose}
+                            >
                               <MenuList
                                 autoFocusItem={downloadMenuOpen}
                                 id="download-menu"
@@ -748,11 +760,18 @@ const ProductDetails = ({ selectedProduct }) => {
                                       alignItems: "center",
                                       gap: 1.5,
                                       "&:hover": {
-                                        backgroundColor: "rgba(46, 67, 124, 0.04)",
+                                        backgroundColor:
+                                          "rgba(46, 67, 124, 0.04)",
                                       },
                                     }}
                                   >
-                                    <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}>
+                                    <Box
+                                      sx={{
+                                        display: "flex",
+                                        alignItems: "center",
+                                        gap: 1,
+                                      }}
+                                    >
                                       {getFileIcon(file.extension)}
                                       <Box>
                                         <Typography
@@ -789,11 +808,15 @@ const ProductDetails = ({ selectedProduct }) => {
                                     color: "#2E437C",
                                     fontWeight: "medium",
                                     "&:hover": {
-                                      backgroundColor: "rgba(46, 67, 124, 0.04)",
+                                      backgroundColor:
+                                        "rgba(46, 67, 124, 0.04)",
                                     },
                                   }}
                                 >
-                                  <LuDownload size={18} style={{ marginRight: 8 }} />
+                                  <LuDownload
+                                    size={18}
+                                    style={{ marginRight: 8 }}
+                                  />
                                   Download All ({downloadFiles.length} files)
                                 </MenuItem>
 
@@ -805,7 +828,8 @@ const ProductDetails = ({ selectedProduct }) => {
                                       color: "#2E437C",
                                       fontWeight: "medium",
                                       "&:hover": {
-                                        backgroundColor: "rgba(46, 67, 124, 0.04)",
+                                        backgroundColor:
+                                          "rgba(46, 67, 124, 0.04)",
                                       },
                                     }}
                                   >
@@ -1000,9 +1024,7 @@ const ProductDetails = ({ selectedProduct }) => {
                       key={`desktop-thumb-${image.id}`}
                       onClick={() => handleThumbnailClick(index)}
                       className={`relative w-full aspect-square overflow-hidden cursor-pointer transition-all duration-300 hover:opacity-90 flex-shrink-0 ${
-                        activeIndex === index
-                          ? "border border-[#2E437C]"
-                          : ""
+                        activeIndex === index ? "border border-[#2E437C]" : ""
                       }`}
                     >
                       <img
@@ -1028,19 +1050,21 @@ const ProductDetails = ({ selectedProduct }) => {
           </div>
         </div>
         <div>
-        <div className="container px-5 max-w-[">
-           {selectedProduct?.description && (
-            <div
-              className="text-base text-gray-600 leading-relaxed pt-5"
-              dangerouslySetInnerHTML={{ __html: addDistClasses(selectedProduct.description) }}
-              style={{
-                fontSize: "16px",
-                lineHeight: "1.75",
-                color: "#4a5568",
-              }}
-            />
-          )}
-        </div>
+          <div className="container px-5 max-w-[">
+            {selectedProduct?.description && (
+              <div
+                className="text-base text-gray-600 leading-relaxed pt-5"
+                dangerouslySetInnerHTML={{
+                  __html: addDistClasses(selectedProduct.description),
+                }}
+                style={{
+                  fontSize: "16px",
+                  lineHeight: "1.75",
+                  color: "#4a5568",
+                }}
+              />
+            )}
+          </div>
         </div>
       </div>
 
@@ -1079,7 +1103,6 @@ const ProductDetails = ({ selectedProduct }) => {
               src={images[fullscreenImageIndex]?.src}
               alt={images[fullscreenImageIndex]?.alt}
               className="w-[500px] h-[auto] object-contain"
-           
             />
           </div>
 

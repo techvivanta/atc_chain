@@ -3,7 +3,7 @@ import { MdArrowOutward } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 
 const NewsCard = ({ props }) => {
-  const navigate = useNavigate();
+  const navigate = useNavigate();  
   
   // Function to truncate text
   const truncateText = (text, maxLength) => {
@@ -22,7 +22,7 @@ const NewsCard = ({ props }) => {
         {/* Image container with 4:3 aspect ratio */}
         <div className="w-full aspect-[3/4] overflow-hidden">
           <img
-            src={props.image}
+            src={props.display_image}
             className="w-full h-full object-cover"
             alt="img"
           />

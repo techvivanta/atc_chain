@@ -69,7 +69,9 @@ const usePosts = (endpoint = "settings/post") => {
               id: post.id,
               fullDescription: post.description || '',
               type: post.type,
-              location:post.location
+              location:post.location,
+              display_image:post.display_image ?  `${import.meta.env.VITE_BACKEND_URL}/${post.display_image}`
+                : null
             };
           });
 
