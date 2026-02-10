@@ -425,18 +425,18 @@ export default function Home() {
       </section>
 
       {/* cradit section */}
-      <section className="relative py-5 overflow-hidden">
-        {/* Background image */}
+      {/* <section className="relative py-5 overflow-hidden">
+     
         <img
           src={crbg}
           alt="cr bg"
           className="absolute inset-0 w-full h-full object-cover z-0"
         />
 
-        {/* Dark overlay */}
+       
         <div className="absolute inset-0 bg-black/75 z-10"></div>
 
-        {/* Content */}
+       
         <div
           className="
       relative z-20
@@ -448,14 +448,14 @@ export default function Home() {
       md:flex-row md:justify-around md:items-center md:text-right
     "
         >
-          {/* Left logo */}
+         
           <img
             src={TechVivantaLogo}
             alt="logo"
             className="h-14 sm:h-16 md:h-20"
           />
 
-          {/* QR Code */}
+          
           <div
             className="
         bg-white p-2 rounded-lg
@@ -468,7 +468,7 @@ export default function Home() {
             />
           </div>
 
-          {/* Text content */}
+        
           <div className="text-white">
             <h6 className="text-[18px] sm:text-[22px] md:text-[26px] font-[500]">
               Designed & Developed by Tech Vivanta
@@ -491,7 +491,7 @@ export default function Home() {
             </p>
           </div>
         </div>
-      </section>
+      </section> */}
     </div>
   );
 }
