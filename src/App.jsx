@@ -15,6 +15,21 @@ import OurProduct from "./pages/product/OurProduct";
 import Error from "./pages/error/Error";
 import WhatsappIcon from "./components/common/WhatsappIcon";
 import { handleDisplayScaling } from "./utils/handleDisplayScaling";
+import { useLocation } from "react-router-dom";
+
+function PageViewTracker() {
+  const location = useLocation();
+
+  useEffect(() => {
+    if (typeof window.gtag === "function") {
+      window.gtag("config", "G-GB4DNYD3W6", {
+        page_path: `${location.pathname}${location.search}${location.hash}`,
+      });
+    }
+  }, [location]);
+
+  return null;
+}
 
 function App() {
   useEffect(() => {
@@ -25,6 +40,7 @@ function App() {
   return (
     <>
       <BrowserRouter>
+        <PageViewTracker />
         <ScrollToTop />
         <WhatsappIcon />
         <Routes>
