@@ -175,7 +175,7 @@ export default function ExpertSolutions() {
             className=""
             onClick={() =>
               window.open(
-                "https://atc-chain-flex-zero.vercel.app/",
+                "https://curveconveyor.com/",
                 "_blank",
                 "noopener,noreferrer"
               )
