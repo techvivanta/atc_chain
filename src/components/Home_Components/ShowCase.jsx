@@ -226,7 +226,7 @@ const ShowCase = () => {
 
   return (
     <section className="container mx-auto w-full px-4 md:px-10 lg:px-5 xl:px-15 2xl:px-25 py-10 2xl:pb-25  relative  bg-white overflow-visible ">
-      <div className="px-6 sm:px-8 md:px-0 md:text-left text-left">
+      <div className="px-0 md:px-0 md:text-left text-left">
         <motion.h2
           variants={containerVariants}
           initial="hidden"
@@ -234,13 +234,21 @@ const ShowCase = () => {
           viewport={{ once: true, margin: "-80px" }}
           className="
       text-left
-      text-[28px] sm:text-[32px] md:text-[36px] lg:text-[42px] xl:text-[48px]
-      text-[#2E437C] leading-[44px] font-[700]
+      text-[30px] md:text-[48px]
+      text-[#2E437C] leading-[1.17] font-[700]
     "
         >
-          <CustomHeading title="Interactive" className="text-[#2E437C]" />
+          <CustomHeading
+            title="Interactive"
+            className="text-[#2E437C]"
+            headingClassName="flex flex-wrap gap-x-0.5 md:gap-x-2 gap-y-0"
+          />
           <br />
-          <CustomHeading title="Product Showcase" className="text-[#BABEC8]" />
+          <CustomHeading
+            title="Product Showcase"
+            className="text-[#BABEC8]"
+            headingClassName="flex flex-wrap gap-x-0.5 md:gap-x-2 gap-y-0"
+          />
         </motion.h2>
       </div>
 

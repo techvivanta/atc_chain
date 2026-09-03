@@ -4,6 +4,7 @@ import * as React from 'react';
 export function CustomHeading({
   title,
   className = '',
+  headingClassName = 'flex flex-wrap gap-0.5 md:gap-2',
   direction = 'up',
   staggerChildren = 0.05,
   as = 'h2',
@@ -61,7 +62,7 @@ export function CustomHeading({
       className={`inline-block ${className}`}
     >
       {/* Remove overflow-hidden from heading to prevent Y clipping */}
-      <HeadingTag className="flex flex-wrap gap-0.5 md:gap-2">
+      <HeadingTag className={headingClassName}>
         {words.map((word, index) => (
           <motion.span
             key={index}

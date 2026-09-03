@@ -117,15 +117,15 @@ export default function ExpertSolutions() {
           <motion.h2
             variants={containerVariants}
             className="
-      text-[38px] md:text-[48px]
-      leading-[45px] sm:leading-[44px] md:leading-[52px] lg:leading-[60px] text-[#BABEC8]
-      font-[600] mb-6 sm:mb-5"
+      text-[30px] md:text-[48px] text-left
+      leading-[1.17] text-[#BABEC8]
+      font-bold mb-6 sm:mb-5"
           >
-            Expert{" "}
-            <span className="text-[#2E437C] font-[600]">
-              Solutions for Custom Conveyor
+            Custom{" "}
+            <span className="text-[#2E437C] font-bold">
+              Conveyor Chain Solutions
             </span>{" "}
-            Needs.
+            for Every Industry
           </motion.h2>
 
           {/* Paragraph 1 */}

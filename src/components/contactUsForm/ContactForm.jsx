@@ -8,7 +8,13 @@ import {
 } from "react-icons/io5";
 import { CustomHeading } from "../common/CustomHeading";
 
-const ContactForm = () => {
+// Heading is prop-driven so the /contact page keeps its original
+// "Contact Us" <h1> while the homepage renders the SEO heading as an <h2>.
+const ContactForm = ({
+  headingTag: HeadingTag = "h1",
+  headingPrimary = "Contact",
+  headingSecondary = "Us",
+}) => {
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -166,15 +172,25 @@ const ContactForm = () => {
         >
           {/* Header */}
           <div className="space-y-4">
-            <h1 className="text-[32px] md:text-[40px] lg:text-[48px] font-bold leading-tight">
+            <HeadingTag className="text-[30px] md:text-[40px] lg:text-[48px] font-bold text-left leading-[1.1] md:leading-[1.05]">
               <span className="text-[#2E437C]">
-                <CustomHeading title="Contact" className="" />
+                <CustomHeading
+                  as="span"
+                  title={headingPrimary}
+                  className=""
+                  headingClassName="flex flex-wrap gap-x-0.5 md:gap-x-2 gap-y-0"
+                />
               </span>
               <span className="text-[#BABEC8]">
                 {" "}
-                <CustomHeading title="Us" className="" />
+                <CustomHeading
+                  as="span"
+                  title={headingSecondary}
+                  className=""
+                  headingClassName="flex flex-wrap gap-x-0.5 md:gap-x-2 gap-y-0"
+                />
               </span>
-            </h1>
+            </HeadingTag>
             <p className="text-[#343434] text-[16px] lg:text-[17.76px] leading-relaxed">
               We are committed to processing the information in
               <br className="hidden lg:block" />
