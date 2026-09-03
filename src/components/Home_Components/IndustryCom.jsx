@@ -740,9 +740,25 @@ export default function IndustryCom() {
         initial="hidden"
         whileInView="visible"
         viewport={{ once: true, margin: "-80px" }}
-        className=" ps-2 lg:ps-25 text-[44px] md:text-[112px] font-[500] md:font-[400] text-[#BABEC8] mb-10 text-center md:text-left "
+        className=" ps-4 lg:ps-25 text-[28px] sm:text-[36px] md:text-[56px] lg:text-[72px] xl:text-[92px] font-[500] md:font-[400] text-[#BABEC8] mb-10 text-left leading-[1.15] md:leading-[1.05] xl:leading-[0.95] "
       >
-        <CustomHeading title="Industries we serve" className="" />
+        <span className="block">
+          <CustomHeading
+            as="span"
+            title="Conveyor Solutions"
+            className=""
+            headingClassName="flex flex-wrap gap-x-0.5 md:gap-x-2 gap-y-0"
+          />
+        </span>
+        <span className="block">
+          <CustomHeading
+            as="span"
+            title="for Diverse Industries"
+            className=""
+            headingClassName="flex flex-wrap gap-x-0.5 md:gap-x-2 gap-y-0"
+            delay={0.12}
+          />
+        </span>
       </motion.h2>
 
       <div className=" grid grid-cols-1 md:grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-center">

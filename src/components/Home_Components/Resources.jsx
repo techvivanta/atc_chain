@@ -73,7 +73,7 @@ export default function Resources() {
   };
 
   return (
-    <div className="container mx-auto w-full bg-white px-4 sm:px-8 lg:px-16 py-12">
+    <div className="container mx-auto w-full bg-white px-4 md:px-10 lg:px-15 py-12">
       <motion.div
         initial="hidden"
         whileInView="visible"
@@ -82,14 +82,24 @@ export default function Resources() {
         className="mb-8"
       >
         <motion.h2
-          className="text-[37px] sm:text-4xl lg:text-5xl font-bold text-[#2E437C]"
+          className="text-[30px] md:text-[48px] font-bold text-[#2E437C] text-left leading-[1.17]"
           variants={headerVariants}
         >
           <span className="text-[#2E437C]">
-            <CustomHeading title="Resources " className="" />
+            <CustomHeading
+              as="span"
+              title="Industry Resources "
+              className=""
+              headingClassName="flex flex-wrap gap-x-0.5 md:gap-x-2 gap-y-0"
+            />
           </span>
           <span className="text-[#BABEC8]">
-            <CustomHeading title="& Insights" className="" />
+            <CustomHeading
+              as="span"
+              title="& Technical Insights"
+              className=""
+              headingClassName="flex flex-wrap gap-x-0.5 md:gap-x-2 gap-y-0"
+            />
           </span>
         </motion.h2>
 

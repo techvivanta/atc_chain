@@ -383,16 +383,27 @@ export default function Home() {
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
-            className="mb-12 px-14 mx-auto container"
+            className="mb-12 px-4 md:px-10 lg:px-14 mx-auto container"
           >
-            <motion.h2 className="text-3xl sm:text-4xl md:text-5xl font-bold text-center md:text-start">
+            <motion.h2 className="text-[30px] md:text-[48px] font-bold text-left leading-[1.1] md:leading-[1.05]">
               <span className="text-[#2E437C]">
-                <CustomHeading title="Our" className="" />
+                <CustomHeading
+                  as="span"
+                  title="Trusted by"
+                  className=""
+                  headingClassName="flex flex-wrap gap-x-0.5 md:gap-x-2 gap-y-0"
+                />
               </span>
               <span className="text-[#BABEC8]">
-                <CustomHeading title="Clients" className="" />
+                <CustomHeading
+                  as="span"
+                  title="Industry-Leading Brands"
+                  className=""
+                  headingClassName="flex flex-wrap gap-x-0.5 md:gap-x-2 gap-y-0"
+                />
               </span>
             </motion.h2>
+
           </motion.div>
 
           <motion.div
@@ -459,7 +470,11 @@ export default function Home() {
         viewport={{ once: true, margin: "-100px" }}
         className="fade-in-section  container mx-auto mt-10 px-4 sm:px-6 md:px-10 lg:px-16 xl:px-20   "
       >
-        <ContactForm />
+        <ContactForm
+          headingTag="h2"
+          headingPrimary="Get Expert"
+          headingSecondary="Conveyor Chain Assistance"
+        />
       </motion.div>
 
       {/* Map Section with fast animation */}

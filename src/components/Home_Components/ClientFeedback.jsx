@@ -184,12 +184,20 @@ export default function ClientFeedback() {
           Client Feedback
         </motion.p>
 
-        <motion.h2 className="text-[30px] md:text-[48px] font-[700] text-[#2E437C] mt-2 leading-[35px]">
-          <CustomHeading title="Don't take our world for it!" className="" />
+        <motion.h2 className="text-[30px] md:text-[48px] font-[700] text-[#2E437C] mt-2 leading-[1.17]">
+          <CustomHeading
+            title="Don't take our world for it!"
+            className=""
+            headingClassName="flex flex-wrap gap-x-0.5 md:gap-x-2 gap-y-0"
+          />
         </motion.h2>
 
-        <motion.h3 className="text-[30px] md:text-[48px] font-bold text-[#BABEC8]">
-          <CustomHeading title="Hear it from our partners." className="" />
+        <motion.h3 className="text-[30px] md:text-[48px] font-bold text-[#BABEC8] leading-[1.17]">
+          <CustomHeading
+            title="Hear it from our partners."
+            className=""
+            headingClassName="flex flex-wrap gap-x-0.5 md:gap-x-2 gap-y-0"
+          />
         </motion.h3>
       </motion.div>
 
