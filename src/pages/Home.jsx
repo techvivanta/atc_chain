@@ -238,83 +238,6 @@ export default function Home() {
       </motion.span>
     ));
 
-  const schemas = [
-    {
-      "@context": "https://schema.org",
-      "@type": "Organization",
-      name: "ATC Chain",
-      url: "https://atcchain.com/",
-      logo: "https://atcchain.com/assets/atc_logo-1w21EAkq.png",
-      description:
-        "ATC Chain is a leading industrial conveyor chain manufacturer in India specializing in modular belts, slat chains, conveyor components, and automation solutions.",
-      contactPoint: {
-        "@type": "ContactPoint",
-        telephone: "+91-90237-25674",
-        contactType: "customer service",
-        areaServed: "IN",
-        availableLanguage: ["English"],
-      },
-      sameAs: [
-        "https://www.linkedin.com/company/atc-chains-india-ahmedabad/",
-        "https://www.youtube.com/@atcchainsindia",
-        "https://www.instagram.com/atcchainsindia/",
-      ],
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "WebSite",
-      name: "ATC Chain",
-      url: "https://atcchain.com/",
-      potentialAction: {
-        "@type": "SearchAction",
-        target: "https://atcchain.com/search?q={search_term_string}",
-        "query-input": "required name=search_term_string",
-      },
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "BreadcrumbList",
-      itemListElement: [
-        {
-          "@type": "ListItem",
-          position: 1,
-          name: "Home",
-          item: "https://atcchain.com/",
-        },
-      ],
-    },
-    {
-      "@context": "https://schema.org",
-      "@type": "FAQPage",
-      mainEntity: [
-        {
-          "@type": "Question",
-          name: "What products does ATC Chain manufacture?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "ATC Chain manufactures conveyor chains, modular belts, slat chains, conveyor components, and industrial automation solutions.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "Which industries use ATC Chain products?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "ATC Chain products are widely used in food processing, packaging, pharmaceutical, beverage, and automotive industries.",
-          },
-        },
-        {
-          "@type": "Question",
-          name: "Does ATC Chain provide custom conveyor solutions?",
-          acceptedAnswer: {
-            "@type": "Answer",
-            text: "Yes, ATC Chain provides customized conveyor chain and automation solutions based on industrial requirements.",
-          },
-        },
-      ],
-    },
-  ];
-
   return (
     <div>
       <Seo
@@ -323,7 +246,6 @@ export default function Home() {
         keywords="Conveyor Chain Manufacturer, Industrial Chain Manufacturer, Modular Belt Manufacturer, Slat Chain Manufacturer, Conveyor Components Manufacturer, Thermoplastic Slat Chains, SS Slat Chains India, Conveyor Chain Supplier India, ATC Chains India"
         image="https://atcchain.com/assets/Showcase-DamggYmA.png"
         url="https://atcchain.com/"
-        schemas={schemas}
       />
       <HomeBanner onAnimationComplete={handleBannerAnimationComplete} />
 
