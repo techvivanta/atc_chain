@@ -1,12 +1,11 @@
 import React, { useState, useRef, useEffect } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
-import { Navigation, Thumbs, Autoplay } from "swiper/modules";
+import { Navigation, Autoplay } from "swiper/modules";
 import { HiChevronRight } from "react-icons/hi2";
 import {
   MdClose,
   MdDescription,
   MdPictureAsPdf,
-  MdKeyboardArrowDown,
 } from "react-icons/md";
 import { FiMaximize2 } from "react-icons/fi";
 import ProductImageModal from "./ProductImageModal";
@@ -24,50 +23,35 @@ import {
   Divider,
   Alert,
   CircularProgress,
-  List,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
-  ListItemSecondaryAction,
-  Chip,
-  Menu,
-  MenuItem,
-  ButtonGroup,
-  ClickAwayListener,
-  Grow,
-  Paper,
-  Popper,
-  MenuList,
 } from "@mui/material";
 import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
-import "swiper/css/thumbs";
 import { LuDownload } from "react-icons/lu";
+import JSZip from "jszip";
 
 
 
 const ProductDetails = ({ selectedProduct }) => {
-  const [thumbsSwiper, setThumbsSwiper] = useState(null);
   const [activeIndex, setActiveIndex] = useState(0);
-  const [mainSwiperRef, setMainSwiperRef] = useState(null);
+  const desktopSwiperRef = useRef(null);
+  const mobileSwiperRef = useRef(null);
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
 
   // Dialog states
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [isDownloadDialogOpen, setIsDownloadDialogOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState({ type: "", message: "" });
   const [downloadingFiles, setDownloadingFiles] = useState(new Set());
+  const [isDownloadingAll, setIsDownloadingAll] = useState(false);
 
   // Image fullscreen states
   const [isImageFullscreen, setIsImageFullscreen] = useState(false);
   const [fullscreenImageIndex, setFullscreenImageIndex] = useState(0);
 
-  // Download dropdown states
-  const [downloadMenuOpen, setDownloadMenuOpen] = useState(false);
-  const downloadAnchorRef = useRef(null);
+  // Downloads section ref
+  const downloadsSectionRef = useRef(null);
 
   // Form states
   const [formData, setFormData] = useState({
@@ -101,10 +85,30 @@ const ProductDetails = ({ selectedProduct }) => {
   // Handle thumbnail click to update main slider
   const handleThumbnailClick = (index) => {
     setActiveIndex(index);
-    if (mainSwiperRef) {
-      mainSwiperRef.slideTo(index);
-    }
+    [desktopSwiperRef.current, mobileSwiperRef.current].forEach((swiper) => {
+      if (swiper && !swiper.destroyed) {
+        if (swiper.params?.loop) {
+          swiper.slideToLoop(index);
+        } else {
+          swiper.slideTo(index);
+        }
+      }
+    });
   };
+
+  // Reset slider position when selected product changes
+  useEffect(() => {
+    setActiveIndex(0);
+    [desktopSwiperRef.current, mobileSwiperRef.current].forEach((swiper) => {
+      if (swiper && !swiper.destroyed) {
+        if (swiper.params?.loop) {
+          swiper.slideToLoop(0, 0);
+        } else {
+          swiper.slideTo(0, 0);
+        }
+      }
+    });
+  }, [selectedProduct?.id]);
 
   const getImageUrl = (imagePath) => {
     if (!imagePath || typeof imagePath !== "string") return null;
@@ -220,21 +224,28 @@ const ProductDetails = ({ selectedProduct }) => {
       jpeg: "Image",
       png: "Image",
       gif: "Image",
+      svg: "Vector Image",
       zip: "Archive",
       rar: "Archive",
+      stp: "3D CAD Model (STEP)",
+      step: "3D CAD Model (STEP)",
+      iges: "CAD Model (IGES)",
+      igs: "CAD Model (IGES)",
+      dwg: "AutoCAD Drawing",
+      dxf: "Drawing Exchange",
     };
     return types[extension] || "Document";
   };
 
   const getFileIcon = (extension) => {
-    const iconProps = { size: 20 };
+    const iconProps = { size: 22 };
     if (["pdf"].includes(extension)) {
       return <MdPictureAsPdf {...iconProps} color="#d32f2f" />;
     }
-    if (["jpg", "jpeg", "png", "gif"].includes(extension)) {
+    if (["jpg", "jpeg", "png", "gif", "svg", "webp"].includes(extension)) {
       return <MdPictureAsPdf {...iconProps} color="#2196f3" />;
     }
-    return <MdDescription {...iconProps} color="#757575" />;
+    return <MdDescription {...iconProps} color="#2E437C" />;
   };
 
   const downloadFiles = getDownloadFiles();
@@ -335,25 +346,19 @@ const ProductDetails = ({ selectedProduct }) => {
     }
   };
 
-  // UPDATED: Download menu toggle handlers
-  const handleDownloadMenuToggle = () => {
-    setDownloadMenuOpen((prevOpen) => !prevOpen);
-  };
-
-  const handleDownloadMenuClose = (event) => {
-    if (
-      downloadAnchorRef.current &&
-      downloadAnchorRef.current.contains(event.target)
-    ) {
-      return;
+  // Scroll to Downloads section
+  const scrollToDownloads = () => {
+    if (downloadsSectionRef.current) {
+      downloadsSectionRef.current.scrollIntoView({
+        behavior: "smooth",
+        block: "start",
+      });
     }
-    setDownloadMenuOpen(false);
   };
 
-  // UPDATED: File download handler
+  // File download handler
   const handleFileDownload = async (file) => {
     setDownloadingFiles((prev) => new Set(prev).add(file.id));
-    setDownloadMenuOpen(false);
 
     try {
       // Create a temporary link for download
@@ -375,19 +380,56 @@ const ProductDetails = ({ selectedProduct }) => {
     }
   };
 
-  // Handle download all files
+  // Handle download all files as a single ZIP
   const handleDownloadAll = async () => {
-    setDownloadMenuOpen(false);
-    for (const file of downloadFiles) {
-      await handleFileDownload(file);
-      await new Promise((resolve) => setTimeout(resolve, 500));
-    }
-  };
+    if (downloadFiles.length === 0 || isDownloadingAll) return;
 
-  // Handle view all downloads
-  const handleViewAllDownloads = () => {
-    setDownloadMenuOpen(false);
-    handleOpenDownloadDialog();
+    setIsDownloadingAll(true);
+    try {
+      const zip = new JSZip();
+
+      // Download each file blob and add to zip
+      const downloadPromises = downloadFiles.map(async (file, index) => {
+        try {
+          const response = await fetch(file.url);
+          if (!response.ok) {
+            throw new Error(`Failed to fetch ${file.name}`);
+          }
+          const blob = await response.blob();
+          const fileName = file.name || `file_${index + 1}.${file.extension || "bin"}`;
+          zip.file(fileName, blob);
+        } catch (fetchErr) {
+          console.error("Error fetching file for ZIP:", file.name, fetchErr);
+        }
+      });
+
+      await Promise.all(downloadPromises);
+
+      // Generate the ZIP file
+      const zipBlob = await zip.generateAsync({ type: "blob" });
+
+      // Build product zip filename
+      const rawTitle = selectedProduct?.title || selectedProduct?.productName || "Product";
+      const sanitizedTitle = rawTitle
+        .replace(/[^a-zA-Z0-9_-]/g, "_")
+        .replace(/_+/g, "_")
+        .replace(/^_|_$/g, "");
+      const zipFileName = `${sanitizedTitle || "product"}_downloads.zip`;
+
+      // Trigger download
+      const link = document.createElement("a");
+      link.href = URL.createObjectURL(zipBlob);
+      link.download = zipFileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+    } catch (error) {
+      console.error("Error creating ZIP download:", error);
+      alert("Failed to download ZIP file. Please try downloading files individually.");
+    } finally {
+      setIsDownloadingAll(false);
+    }
   };
 
   // Handle form input changes
@@ -517,15 +559,6 @@ const ProductDetails = ({ selectedProduct }) => {
     setSubmitStatus({ type: "", message: "" });
   };
 
-  // Handle download dialog
-  const handleOpenDownloadDialog = () => {
-    setIsDownloadDialogOpen(true);
-  };
-
-  const handleCloseDownloadDialog = () => {
-    setIsDownloadDialogOpen(false);
-  };
-
   if (!selectedProduct) {
     return (
       <div className="w-full min-h-screen bg-white flex items-center justify-center">
@@ -594,227 +627,15 @@ const ProductDetails = ({ selectedProduct }) => {
 
           {/* Action Buttons */}
           <div className="flex flex-row flex-wrap gap-2 sm:gap-3 w-full lg:w-auto lg:justify-end">
-            {productData.url && (
-              <button
-                onClick={() => {
-                  window.open(productData.url, "_blank", "noopener,noreferrer");
-                }}
-                className="flex-1 min-w-[120px] sm:flex-none px-3 sm:px-6 py-2.5 border border-black text-black text-xs sm:text-sm font-medium uppercase rounded-full hover:bg-gray-50 transition-colors"
-              >
-                <span className="truncate">Explore More</span>
-              </button>
-            )}
-
-            {/* UPDATED: Enhanced Download Button with Dropdown */}
+            {/* Download Button - scrolls to Downloads section */}
             {downloadFiles.length > 0 && (
-              <div className="relative flex-1 sm:flex-none">
-                {downloadFiles.length === 1 ? (
-                  // Single file - direct download
-                  <Button
-                    onClick={() => handleFileDownload(downloadFiles[0])}
-                    variant="contained"
-                    disabled={downloadingFiles.has(downloadFiles[0].id)}
-                    startIcon={<LuDownload className="w-4 h-4" />}
-                    sx={{
-                      backgroundColor: "#2E437C",
-                      textTransform: "uppercase",
-                      fontSize: { xs: "0.75rem", sm: "0.875rem" },
-                      fontWeight: 500,
-                      borderRadius: "9999px",
-                      px: { xs: 2, sm: 3 },
-                      py: 1.25,
-                      "&:hover": {
-                        backgroundColor: "#1E2F5C",
-                      },
-                    }}
-                  >
-                    {downloadingFiles.has(downloadFiles[0].id) ? (
-                      <CircularProgress size={16} color="inherit" />
-                    ) : (
-                      "Download"
-                    )}
-                  </Button>
-                ) : (
-                  // Multiple files - dropdown
-                  <>
-                    <ButtonGroup
-                      variant="contained"
-                      ref={downloadAnchorRef}
-                      aria-label="download options"
-                      sx={{
-                        boxShadow: "none",
-                        width: "100%",
-                        "& .MuiButton-root": {
-                          backgroundColor: "#2E437C",
-                          textTransform: "uppercase",
-                          fontSize: { xs: "0.75rem", sm: "0.875rem" },
-                          fontWeight: 500,
-                          borderRadius: "9999px",
-                          flex: 1,
-                          "&:hover": {
-                            backgroundColor: "#1E2F5C",
-                          },
-                        },
-                        "& .MuiButtonGroup-grouped:not(:last-of-type)": {
-                          borderRight: "1px solid rgba(255,255,255,0.3)",
-                        },
-                      }}
-                    >
-                      <Button
-                        size="small"
-                        onClick={handleDownloadMenuToggle}
-                        startIcon={<LuDownload className="w-4 h-4" />}
-                        endIcon={<MdKeyboardArrowDown className="w-4 h-4" />}
-                        sx={{
-                          px: { xs: 2, sm: 3 },
-                          py: 1.25,
-                          minWidth: 0,
-                          "& .MuiButton-startIcon": {
-                            marginRight: { xs: "4px", sm: "8px" },
-                          },
-                        }}
-                      >
-                        <span
-                          style={{
-                            overflow: "hidden",
-                            textOverflow: "ellipsis",
-                          }}
-                        >
-                          Downloads ({downloadFiles.length})
-                        </span>
-                      </Button>
-                    </ButtonGroup>
-
-                    <Popper
-                      sx={{ zIndex: 99999 }}
-                      open={downloadMenuOpen}
-                      anchorEl={downloadAnchorRef.current}
-                      role={undefined}
-                      transition
-                      disablePortal
-                      placement="bottom-end"
-                    >
-                      {({ TransitionProps, placement }) => (
-                        <Grow
-                          {...TransitionProps}
-                          style={{
-                            transformOrigin:
-                              placement === "bottom-end"
-                                ? "right top"
-                                : "right bottom",
-                          }}
-                        >
-                          <Paper
-                            sx={{
-                              minWidth: 250,
-                              mt: 1,
-                              borderRadius: 2,
-                              boxShadow: 3,
-                            }}
-                          >
-                            <ClickAwayListener
-                              onClickAway={handleDownloadMenuClose}
-                            >
-                              <MenuList
-                                autoFocusItem={downloadMenuOpen}
-                                id="download-menu"
-                              >
-                                {downloadFiles.map((file) => (
-                                  <MenuItem
-                                    key={file.id}
-                                    onClick={() => handleFileDownload(file)}
-                                    disabled={downloadingFiles.has(file.id)}
-                                    sx={{
-                                      py: 1,
-                                      display: "flex",
-                                      alignItems: "center",
-                                      gap: 1.5,
-                                      "&:hover": {
-                                        backgroundColor:
-                                          "rgba(46, 67, 124, 0.04)",
-                                      },
-                                    }}
-                                  >
-                                    <Box
-                                      sx={{
-                                        display: "flex",
-                                        alignItems: "center",
-                                        gap: 1,
-                                      }}
-                                    >
-                                      {getFileIcon(file.extension)}
-                                      <Box>
-                                        <Typography
-                                          variant="body2"
-                                          fontWeight="medium"
-                                          noWrap
-                                          sx={{ maxWidth: 180 }}
-                                        >
-                                          {file.name}
-                                        </Typography>
-                                        <Typography
-                                          variant="caption"
-                                          color="text.secondary"
-                                        >
-                                          {file.type}
-                                        </Typography>
-                                      </Box>
-                                    </Box>
-                                    <Box sx={{ ml: "auto" }}>
-                                      {downloadingFiles.has(file.id) ? (
-                                        <CircularProgress size={16} />
-                                      ) : (
-                                        <LuDownload className="text-[16px]" />
-                                      )}
-                                    </Box>
-                                  </MenuItem>
-                                ))}
-
-                                <Divider />
-                                <MenuItem
-                                  onClick={handleDownloadAll}
-                                  sx={{
-                                    py: 1.5,
-                                    color: "#2E437C",
-                                    fontWeight: "medium",
-                                    "&:hover": {
-                                      backgroundColor:
-                                        "rgba(46, 67, 124, 0.04)",
-                                    },
-                                  }}
-                                >
-                                  <LuDownload
-                                    size={18}
-                                    style={{ marginRight: 8 }}
-                                  />
-                                  Download All ({downloadFiles.length} files)
-                                </MenuItem>
-
-                                {downloadFiles.length > 5 && (
-                                  <MenuItem
-                                    onClick={handleViewAllDownloads}
-                                    sx={{
-                                      py: 1.5,
-                                      color: "#2E437C",
-                                      fontWeight: "medium",
-                                      "&:hover": {
-                                        backgroundColor:
-                                          "rgba(46, 67, 124, 0.04)",
-                                      },
-                                    }}
-                                  >
-                                    View All Downloads
-                                  </MenuItem>
-                                )}
-                              </MenuList>
-                            </ClickAwayListener>
-                          </Paper>
-                        </Grow>
-                      )}
-                    </Popper>
-                  </>
-                )}
-              </div>
+              <button
+                onClick={scrollToDownloads}
+                className="flex-1 min-w-[130px] sm:flex-none px-4 sm:px-6 py-2.5 bg-[#2E437C] text-white text-xs sm:text-sm font-medium uppercase rounded-full hover:bg-[#1E2F5C] transition-colors flex items-center justify-center gap-2 shadow-sm cursor-pointer"
+              >
+                <LuDownload className="w-4 h-4" />
+                <span className="truncate">Downloads ({downloadFiles.length})</span>
+              </button>
             )}
 
             <button
@@ -832,18 +653,12 @@ const ProductDetails = ({ selectedProduct }) => {
           <div className="lg:hidden">
             <div className="relative w-full aspect-[4/3] bg-gray-100 overflow-hidden shadow-lg">
               <Swiper
-                modules={[Navigation, Thumbs, Autoplay]}
+                modules={[Navigation, Autoplay]}
                 spaceBetween={0}
                 slidesPerView={1}
                 navigation={{
                   nextEl: ".swiper-button-next-custom-mobile",
                   prevEl: ".swiper-button-prev-custom-mobile",
-                }}
-                thumbs={{
-                  swiper:
-                    thumbsSwiper && !thumbsSwiper.destroyed
-                      ? thumbsSwiper
-                      : null,
                 }}
                 autoplay={{
                   delay: 4000,
@@ -853,7 +668,9 @@ const ProductDetails = ({ selectedProduct }) => {
                 loop={images.length > 1}
                 speed={800}
                 onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-                onSwiper={setMainSwiperRef}
+                onSwiper={(swiper) => {
+                  mobileSwiperRef.current = swiper;
+                }}
                 className="w-full h-full"
               >
                 {images.map((image, index) => (
@@ -913,18 +730,12 @@ const ProductDetails = ({ selectedProduct }) => {
             <div className="w-3/4">
               <div className="relative w-full aspect-[4/3] bg-gray-100 overflow-hidden shadow-lg">
                 <Swiper
-                  modules={[Navigation, Thumbs, Autoplay]}
+                  modules={[Navigation, Autoplay]}
                   spaceBetween={0}
                   slidesPerView={1}
                   navigation={{
                     nextEl: ".swiper-button-next-custom-desktop",
                     prevEl: ".swiper-button-prev-custom-desktop",
-                  }}
-                  thumbs={{
-                    swiper:
-                      thumbsSwiper && !thumbsSwiper.destroyed
-                        ? thumbsSwiper
-                        : null,
                   }}
                   autoplay={{
                     delay: 4000,
@@ -934,7 +745,9 @@ const ProductDetails = ({ selectedProduct }) => {
                   loop={images.length > 1}
                   speed={800}
                   onSlideChange={(swiper) => setActiveIndex(swiper.realIndex)}
-                  onSwiper={setMainSwiperRef}
+                  onSwiper={(swiper) => {
+                    desktopSwiperRef.current = swiper;
+                  }}
                   className="w-full h-full swiper-container"
                 >
                   {images.map((image, index) => (
@@ -1019,8 +832,10 @@ const ProductDetails = ({ selectedProduct }) => {
             )}
           </div>
         </div>
+
+        {/* Description */}
         <div>
-          <div className="container px-5 max-w-[">
+          <div className="container px-5">
             {selectedProduct?.description && (
               <div
                 className="text-base text-gray-600 leading-relaxed pt-5"
@@ -1036,6 +851,89 @@ const ProductDetails = ({ selectedProduct }) => {
             )}
           </div>
         </div>
+
+        {/* Downloads Section */}
+        {downloadFiles.length > 0 && (
+          <div
+            ref={downloadsSectionRef}
+            id="downloads"
+            className="mt-12 pt-8 pb-12 border-t border-gray-200"
+          >
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-6">
+              <div>
+                <h3 className="text-xl sm:text-2xl font-bold text-[#2E437C] flex items-center gap-3">
+                  <span>Downloads</span>
+                  <span className="text-xs sm:text-sm font-semibold text-[#2E437C] bg-blue-50 border border-blue-200 px-3 py-0.5 rounded-full">
+                    {downloadFiles.length} {downloadFiles.length === 1 ? "file" : "files"}
+                  </span>
+                </h3>
+                <p className="text-sm text-gray-500 mt-1">
+                  CAD models, technical drawings, specifications and manuals
+                </p>
+              </div>
+
+              {downloadFiles.length > 1 && (
+                <button
+                  onClick={handleDownloadAll}
+                  disabled={isDownloadingAll}
+                  className="inline-flex items-center justify-center gap-2 px-5 py-2.5 text-xs sm:text-sm font-medium text-white bg-[#2E437C] hover:bg-[#1E2F5C] rounded-full transition-colors shadow-sm cursor-pointer disabled:opacity-70 disabled:cursor-not-allowed"
+                >
+                  {isDownloadingAll ? (
+                    <>
+                      <CircularProgress size={16} color="inherit" />
+                      <span>Creating ZIP ({downloadFiles.length} files)...</span>
+                    </>
+                  ) : (
+                    <>
+                      <LuDownload className="w-4 h-4" />
+                      <span>Download All as ZIP ({downloadFiles.length})</span>
+                    </>
+                  )}
+                </button>
+              )}
+            </div>
+
+            {/* Grid of download files - 2 columns for wider cards */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {downloadFiles.map((file) => (
+                <div
+                  key={file.id}
+                  className="flex items-center justify-between p-4 bg-[#F8FAFC] border border-gray-200 rounded-xl hover:shadow-md hover:border-[#2E437C]/40 transition-all group"
+                >
+                  <div className="flex items-center gap-3 min-w-0 flex-1 mr-3">
+                    <div className="w-10 h-10 rounded-lg bg-white shadow-xs border border-gray-100 flex items-center justify-center flex-shrink-0 group-hover:border-[#2E437C]/30 transition-colors">
+                      {getFileIcon(file.extension)}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <p
+                        className="text-sm font-semibold text-gray-800 line-clamp-2 [overflow-wrap:anywhere] leading-snug group-hover:text-[#2E437C] transition-colors"
+                        title={file.name}
+                      >
+                        {file.name}
+                      </p>
+                      <p className="text-xs text-gray-500 mt-0.5 uppercase tracking-wide">
+                        {file.type}
+                      </p>
+                    </div>
+                  </div>
+
+                  <button
+                    onClick={() => handleFileDownload(file)}
+                    disabled={downloadingFiles.has(file.id)}
+                    className="w-9 h-9 flex items-center justify-center rounded-lg bg-white border border-gray-200 hover:bg-[#2E437C] text-[#2E437C] hover:text-white hover:border-[#2E437C] transition-all flex-shrink-0 disabled:opacity-50 shadow-xs cursor-pointer"
+                    title={`Download ${file.name}`}
+                  >
+                    {downloadingFiles.has(file.id) ? (
+                      <CircularProgress size={16} color="inherit" />
+                    ) : (
+                      <LuDownload className="w-4 h-4" />
+                    )}
+                  </button>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Fullscreen Image Modal */}
@@ -1045,153 +943,6 @@ const ProductDetails = ({ selectedProduct }) => {
         images={images}
         initialIndex={fullscreenImageIndex}
       />
-
-      {/* Download Files Dialog */}
-      <Dialog
-        open={isDownloadDialogOpen}
-        onClose={handleCloseDownloadDialog}
-        fullWidth
-        maxWidth="md"
-        PaperProps={{
-          sx: {
-            borderRadius: 3,
-            maxHeight: "90vh",
-          },
-        }}
-      >
-        <DialogTitle sx={{ m: 0, p: 3, pb: 1 }}>
-          <Box
-            display="flex"
-            alignItems="center"
-            justifyContent="space-between"
-          >
-            <Typography
-              variant="h5"
-              component="div"
-              fontWeight="bold"
-              color="#2E437C"
-            >
-              Download Files - {productData.productName}
-            </Typography>
-            <IconButton
-              aria-label="close"
-              onClick={handleCloseDownloadDialog}
-              sx={{ color: "grey.500" }}
-            >
-              <MdClose size={24} />
-            </IconButton>
-          </Box>
-          <Typography variant="body2" color="text.secondary" mt={1}>
-            {downloadFiles.length} file{downloadFiles.length !== 1 ? "s" : ""}{" "}
-            available for download
-          </Typography>
-          <Divider sx={{ mt: 2 }} />
-        </DialogTitle>
-
-        <DialogContent sx={{ p: 3 }}>
-          {downloadFiles.length > 0 ? (
-            <List sx={{ width: "100%" }}>
-              {downloadFiles.map((file) => (
-                <ListItem
-                  key={file.id}
-                  sx={{
-                    border: "1px solid #e0e0e0",
-                    borderRadius: 2,
-                    mb: 2,
-                    "&:last-child": { mb: 0 },
-                  }}
-                >
-                  <ListItemIcon>{getFileIcon(file.extension)}</ListItemIcon>
-                  <ListItemText
-                    primary={
-                      <Box display="flex" alignItems="center" gap={1}>
-                        <Typography variant="subtitle1" fontWeight="medium">
-                          {file.name}
-                        </Typography>
-                        <Chip
-                          label={file.type}
-                          size="small"
-                          variant="outlined"
-                          sx={{ fontSize: "0.75rem" }}
-                        />
-                      </Box>
-                    }
-                    secondary={
-                      <Typography variant="caption" color="text.secondary">
-                        {file.extension.toUpperCase()} • {file.size}
-                      </Typography>
-                    }
-                  />
-                  <ListItemSecondaryAction>
-                    <IconButton
-                      edge="end"
-                      aria-label="download"
-                      onClick={() => handleFileDownload(file)}
-                      disabled={downloadingFiles.has(file.id)}
-                      sx={{
-                        backgroundColor: "#2E437C",
-                        color: "white",
-                        "&:hover": {
-                          backgroundColor: "#1E2F5C",
-                        },
-                        "&:disabled": {
-                          backgroundColor: "#ccc",
-                        },
-                      }}
-                    >
-                      {downloadingFiles.has(file.id) ? (
-                        <CircularProgress size={20} color="inherit" />
-                      ) : (
-                        <LuDownload />
-                      )}
-                    </IconButton>
-                  </ListItemSecondaryAction>
-                </ListItem>
-              ))}
-            </List>
-          ) : (
-            <Box textAlign="center" py={4}>
-              <Typography variant="body1" color="text.secondary">
-                No files available for download
-              </Typography>
-            </Box>
-          )}
-        </DialogContent>
-
-        <DialogActions sx={{ p: 3, pt: 1 }}>
-          <Button
-            onClick={handleCloseDownloadDialog}
-            variant="outlined"
-            sx={{
-              mr: 1,
-              borderColor: "#2E437C",
-              color: "#2E437C",
-              "&:hover": {
-                borderColor: "#1E2F5C",
-                backgroundColor: "rgba(46, 67, 124, 0.04)",
-              },
-            }}
-          >
-            Close
-          </Button>
-          {downloadFiles.length > 1 && (
-            <Button
-              onClick={handleDownloadAll}
-              variant="contained"
-              sx={{
-                backgroundColor: "#2E437C",
-                "&:hover": {
-                  backgroundColor: "#1E2F5C",
-                },
-                minWidth: 140,
-              }}
-              startIcon={<LuDownload />}
-            >
-              Download All
-            </Button>
-          )}
-        </DialogActions>
-      </Dialog>
 
       {/* Inquiry Dialog */}
       <Dialog

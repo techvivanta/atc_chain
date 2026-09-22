@@ -4,8 +4,10 @@ import next1 from "../../assets/images/next1.jpg";
 import { CustomHeading } from "../common/CustomHeading";
 import usePosts from "../../hooks/usePosts"; // Import your hook
 import Loader from "../common/Loader";
+import { useNavigate } from "react-router-dom";
 
 export default function Gatherings() {
+  const navigate = useNavigate();
   // Use your hook to fetch events
   const { posts: events, loading, error } = usePosts("settings/post/event");
 
@@ -275,6 +277,7 @@ export default function Gatherings() {
                         },
                       },
                     }}
+                    onClick={() => navigate(`/news/details/${event.slug || event.id}`)}
                     className="group overflow-hidden bg-white hover:bg-[#D8DEEE] border-b-2 border-transparent hover:border-b-2 hover:border-[#2E437C] transition-shadow duration-300 cursor-pointer w-[calc(50vw-32px)] flex-shrink-0"
                   >
                     <motion.div className="relative">
@@ -368,6 +371,7 @@ export default function Gatherings() {
                       },
                     },
                   }}
+                  onClick={() => navigate(`/news/details/${event.slug || event.id}`)}
                   className="group overflow-hidden bg-white hover:bg-[#D8DEEE] border-b-2 border-transparent hover:border-b-2 hover:border-[#2E437C] transition-shadow duration-300 cursor-pointer"
                 >
                   <motion.div className="relative">

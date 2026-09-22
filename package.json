@@ -22,6 +22,7 @@
     "aos": "^2.3.4",
     "axios": "^1.12.2",
     "framer-motion": "^12.23.12",
+    "jszip": "^3.10.2",
     "locomotive-scroll": "^4.1.4",
     "lottie-react": "^2.4.1",
     "react": "^19.1.0",
