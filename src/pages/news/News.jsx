@@ -73,9 +73,11 @@ const News = () => {
   return (
     <>
       <Seo
-        title="News | ATC Chain India"
-        description="ATC Chain designs and manufactures high-quality components for the food, beverage, packaging, automotive and automation industries providing the best solution designs and after-sale support."
-        url="https://www.atcchain.com/news"
+        title="Conveyor Chain Industry News & Insights | ATC Chain"
+        description="Read the latest conveyor chain industry news, insights, product updates and technical developments from ATC Chain, a manufacturer of industrial conveyor solutions."
+        keywords="conveyor chain news, conveyor industry news, conveyor chain industry insights, conveyor technology news, industrial conveyor news, conveyor chain manufacturer, conveyor chain manufacturer in India, industrial conveyor chains, conveyor systems, conveyor solutions, modular conveyor belt, slat chain, stainless steel slat chain, thermoplastic slat chain, conveyor components, industrial automation, conveyor chain technology, conveyor manufacturing, conveyor industry trends, ATC Chain"
+        url="https://atcchain.com/news"
+        image="https://atcchain.com/images/social-preview.jpg"
       />
 
       <Navbar navStyle={"white"} />

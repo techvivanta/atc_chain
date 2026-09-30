@@ -58,9 +58,11 @@ function OurProduct() {
   return (
     <>
       <Seo
-        title="Products | ATC Chain India"
-        description="ATC Chain designs and manufactures high-quality components for the food, beverage, packaging, automotive and automation industries providing the best solution designs and after-sale support."
-        url="https://www.atcchain.com/products"
+        title="Industrial Conveyor Chains & Belts Manufacturer | ATC Chain"
+        description="Explore industrial conveyor chains, modular belts, slat chains, conveyor components and cable drag chains from ATC Chain for reliable conveying solutions."
+        keywords="Conveyor Chain Manufacturer, Industrial Conveyor Chains, Conveyor Chain Manufacturer in India, Modular Belt Manufacturer, Modular Conveyor Belts, Slat Chain Manufacturer, SS Slat Chain, Thermoplastic Slat Chain, Conveyor Components, Cable Drag Chain, Conveyor Chain Supplier India, Industrial Conveyor Components"
+        url="https://atcchain.com/products"
+        image="https://atcchain.com/images/social-preview.jpg"
       />
 
       <Navbar navStyle={"white"} />

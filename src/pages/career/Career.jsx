@@ -474,9 +474,11 @@ const Career = () => {
       ) : (
         <>
           <Seo
-            title="Jobs | ATC Chain India"
-            description="ATC Chain designs and manufactures high-quality components for the food, beverage, packaging, automotive and automation industries providing the best solution designs and after-sale support."
-            url="https://www.atcchain.com/jobs"
+            title="Jobs & Careers at ATC Chain | Join Our Team"
+            description="Explore career opportunities at ATC Chain and join our team in industrial conveyor chain manufacturing, engineering, sales, marketing and technical solutions."
+            keywords="ATC Chain jobs, ATC Chain careers, jobs at ATC Chain, careers at ATC Chains India, ATC Chains India jobs, conveyor chain company jobs, conveyor manufacturing jobs, conveyor industry jobs, industrial manufacturing jobs, engineering jobs, mechanical engineering jobs, manufacturing careers, industrial automation jobs, conveyor chain manufacturer jobs, jobs in conveyor manufacturing, technical jobs in manufacturing, sales jobs in industrial products, marketing jobs in manufacturing, Ahmedabad manufacturing jobs, Ahmedabad engineering jobs"
+            url="https://atcchain.com/jobs"
+            image="https://atcchain.com/images/social-preview.jpg"
           />
           <Navbar navStyle={"white"} />
 

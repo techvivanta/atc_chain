@@ -285,9 +285,11 @@ const Industries = () => {
   return (
     <>
       <Seo
-        title="Downloads | ATC Chain India"
-        description="ATC Chain designs and manufactures high-quality components for the food, beverage, packaging, automotive and automation industries providing the best solution designs and after-sale support."
-        url="https://www.atcchain.com/downloads"
+        title="Conveyor Chain Catalogues & Downloads | ATC Chain"
+        description="Download ATC Chain product catalogues, conveyor chain specifications, technical documents and product information for industrial conveyor solutions."
+        keywords="ATC Chain downloads, ATC Chain catalogue, ATC Chain catalog, conveyor chain catalogue, conveyor chain specifications, conveyor product catalogue, industrial conveyor catalogue, conveyor chain technical documents, conveyor chain product information, conveyor belt catalogue, modular belt catalogue, slat chain catalogue, SS slat chain catalogue, thermoplastic slat chain catalogue, conveyor components catalogue, cable drag chain catalogue, conveyor chain manufacturer India, industrial conveyor solutions, conveyor chain manufacturer"
+        url="https://atcchain.com/downloads"
+        image="https://atcchain.com/images/social-preview.jpg"
       />
 
       <Navbar navStyle={"white"} />

@@ -478,9 +478,11 @@ const AboutUs = () => {
     <div ref={scrollContainerRef} className="overflow-hidden">
       {/* Animated Navbar */}
       <Seo
-        title="About | ATC Chain India"
-        description="ATC Chain designs and manufactures high-quality components for the food, beverage, packaging, automotive and automation industries providing the best solution designs and after-sale support."
-        url="https://www.atcchain.com/about"
+        title="About ATC Chain | Conveyor Chain & Modular Belt Manufacturer"
+        description="Learn about ATC Chain, an industrial conveyor solutions manufacturer offering modular belts, slat chains, conveyor components and customized conveying solutions."
+        keywords="about ATC Chain, about ATC Chains India, ATC Chain manufacturer, ATC Chains India manufacturer, conveyor chain manufacturer, conveyor chain manufacturer in India, industrial conveyor manufacturer, modular belt manufacturer, modular conveyor belt manufacturer, slat chain manufacturer, conveyor components manufacturer, industrial conveyor solutions, customized conveyor solutions, conveyor chain supplier India, conveyor belt manufacturer India, industrial conveyor chains, conveyor automation solutions, conveyor manufacturing company, ATC Chain India"
+        url="https://atcchain.com/about"
+        image="https://atcchain.com/images/social-preview.jpg"
       />
       <motion.div
         className="fixed top-0 left-0 right-0 z-50"

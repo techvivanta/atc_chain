@@ -241,11 +241,15 @@ export default function Home() {
   return (
     <div>
       <Seo
-        title="Industrial Conveyor Chain Manufacturer in India | ATC Chains"
-        description="ATC Chains is a leading manufacturer of conveyor chains, modular belts, slat chains, and conveyor components in India. High-quality industrial chain solutions for multiple industries."
-        keywords="Conveyor Chain Manufacturer, Industrial Chain Manufacturer, Modular Belt Manufacturer, Slat Chain Manufacturer, Conveyor Components Manufacturer, Thermoplastic Slat Chains, SS Slat Chains India, Conveyor Chain Supplier India, ATC Chains India"
-        image="https://atcchain.com/assets/Showcase-DamggYmA.png"
+        title="ATC Chains India – Modular Belts & Conveyor Components Manufacturer"
+        description="ATC Chains India manufactures modular belts, chains and conveyor components for food, packaging and automation industries with reliable custom solutions."
+        keywords="modular conveyor belts, conveyor components, slat chain, modular belt manufacturer, food conveyor systems, packaging conveyor, UHMWPE wear strips, conveyor sprockets, plastic chain manufacturer, India"
         url="https://atcchain.com/"
+        ogTitle="ATC Chains India – Modular Belts & Conveyor Components"
+        ogDescription="Leading Indian manufacturer of modular belts, conveyor chains, sprockets, and industrial conveyor solutions for food and automation industries."
+        twitterTitle="ATC Chains India – Conveyor Components Manufacturer"
+        twitterDescription="Reliable modular belts, conveyor chains, and custom industrial components built to last for generations."
+        image="https://atcchain.com/images/social-preview.jpg"
       />
       <HomeBanner onAnimationComplete={handleBannerAnimationComplete} />
 
