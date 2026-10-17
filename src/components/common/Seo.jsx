@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { Title, Meta, Link } from "react-head";
 
 const SITE_NAME = "ATC Chains India";
@@ -18,6 +18,15 @@ const Seo = ({
   twitterDescription,
   schemas,
 }) => {
+  // index.html carries the home page tags so crawlers that don't run JavaScript
+  // still get meta data. React removes them once it mounts, otherwise every page
+  // would end up with two titles, two descriptions and two canonical links.
+  useEffect(() => {
+    document
+      .querySelectorAll("head [data-default-seo]")
+      .forEach((el) => el.remove());
+  }, []);
+
   return (
     <>
       <Title>{title}</Title>
