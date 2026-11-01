@@ -445,7 +445,14 @@ const ProductCom = () => {
             displayOrder: product.displayOrder,
             cover_image: product.cover_image,
           }))
-          .sort((a, b) => a.displayOrder - b.displayOrder);
+          .sort((a, b) => {
+            const orderA = a.displayOrder && a.displayOrder !== 0 ? a.displayOrder : 999999999999;
+            const orderB = b.displayOrder && b.displayOrder !== 0 ? b.displayOrder : 999999999999;
+            if (orderA !== orderB) {
+              return orderA - orderB;
+            }
+            return (a.id || 0) - (b.id || 0);
+          });
       }
 
       setSubcategories(subcategoriesData);
@@ -532,6 +539,7 @@ const ProductCom = () => {
   ) => {
     try {
       setProductDetailsLoading(true);
+      setIsMobileMenuOpen(false);
       // Immediate UI feedback on URL detection
       setViewMode("details");
       setShowDetails(true);
@@ -876,10 +884,12 @@ const ProductCom = () => {
             cover_image: product.cover_image,
           }))
           .sort((a, b) => {
-            if (a.displayOrder == null && b.displayOrder == null) return 0;
-            if (a.displayOrder == null) return 1;
-            if (b.displayOrder == null) return -1;
-            return a.displayOrder - b.displayOrder;
+            const orderA = a.displayOrder && a.displayOrder !== 0 ? a.displayOrder : 999999999999;
+            const orderB = b.displayOrder && b.displayOrder !== 0 ? b.displayOrder : 999999999999;
+            if (orderA !== orderB) {
+              return orderA - orderB;
+            }
+            return (a.id || 0) - (b.id || 0);
           });
 
         setcateId(response.data.data[0]?.category.id);
@@ -1019,6 +1029,7 @@ const ProductCom = () => {
 
     try {
       setProductDetailsLoading(true);
+      setIsMobileMenuOpen(false);
       
       if (productData?.productId) {
           // Just update URL, let useEffect handle the view switch
@@ -1072,6 +1083,7 @@ const ProductCom = () => {
   };
 
   const handleProductClick = (product) => {
+    setIsMobileMenuOpen(false);
     // Avoid reloading if already on the same product
     if (selectedProductId === product.id) return;
 

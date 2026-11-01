@@ -725,9 +725,9 @@ const ProductDetails = ({ selectedProduct }) => {
           </div>
 
           {/* Desktop Layout - 75% slider + 25% vertical thumbnails */}
-          <div className="hidden lg:flex gap-6">
-            {/* Main Slider - 75% width */}
-            <div className="w-3/4">
+          <div className="hidden lg:flex items-start gap-6">
+            {/* Main Slider - 75% width (sticky so it stays visible while scrolling thumbnails) */}
+            <div className="w-3/4 sticky top-24 self-start">
               <div className="relative w-full aspect-[4/3] bg-gray-100 overflow-hidden shadow-lg">
                 <Swiper
                   modules={[Navigation, Autoplay]}
@@ -779,28 +779,12 @@ const ProductDetails = ({ selectedProduct }) => {
               </div>
             </div>
 
-            {/* Vertical Thumbnails - 25% width - Updated with click handler */}
+            {/* Vertical Thumbnails - 25% width - natural flow without separate scrollbar */}
             {images?.length > 1 && (
-              <div className="w-1/4 relative">
-                {/* Up Arrow */}
-                {showThumbnailArrows && (
-                  <button
-                    onClick={() => handleThumbnailScroll("up")}
-                    className="absolute top-0 left-1/2 transform -translate-x-1/2 z-10 w-8 h-8 bg-white/90 hover:bg-white rounded-full flex items-center justify-center cursor-pointer transition-all duration-300 hover:scale-110 shadow-lg mb-1"
-                  >
-                    <HiChevronRight className="w-4 h-4 text-gray-800 -rotate-90" />
-                  </button>
-                )}
-
-                {/* Thumbnail grid */}
+              <div className="w-1/4">
                 <div
                   ref={thumbnailContainerRef}
-                  className="grid grid-cols-2 gap-3 overflow-y-auto scrollbar-hide"
-                  style={{
-                    maxHeight: "550px",
-                    marginTop: showThumbnailArrows ? "32px" : "0",
-                    marginBottom: showThumbnailArrows ? "32px" : "0",
-                  }}
+                  className="grid grid-cols-2 gap-3"
                 >
                   {images.map((image, index) => (
                     <div
@@ -818,16 +802,6 @@ const ProductDetails = ({ selectedProduct }) => {
                     </div>
                   ))}
                 </div>
-
-                {/* Down Arrow */}
-                {showThumbnailArrows && (
-                  <button
-                    onClick={() => handleThumbnailScroll("down")}
-                    className="absolute bottom-0 left-1/2 transform -translate-x-1/2 z-10 w-8 h-8 bg-white/90 hover:bg-white rounded-full flex items-center justify-center cursor-pointer shadow-lg mt-1"
-                  >
-                    <HiChevronRight className="w-4 h-4 text-gray-800 rotate-90" />
-                  </button>
-                )}
               </div>
             )}
           </div>

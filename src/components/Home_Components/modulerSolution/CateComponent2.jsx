@@ -183,11 +183,11 @@ export default function CateComponent2() {
               >
 
                 {/* Icon without any continuous animation */}
-                <div className="relative z-10 w-12 h-12 sm:w-14 sm:h-14 mb-3 flex items-center justify-center">
+                <div className="relative z-10 w-12 h-12 sm:w-14 sm:h-14 mb-3 flex items-center justify-center p-0.5">
                   <img
                     src={`${item.icon}`}
                     alt={item.title}
-                    className="w-full h-full object-contain transition-all duration-300
+                    className="w-full h-full object-contain p-0.5 transition-all duration-300
              group-hover:brightness-0 group-hover:invert"
                     onError={(e) => {
                       // Fallback for broken images
