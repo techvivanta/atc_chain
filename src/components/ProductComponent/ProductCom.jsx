@@ -1163,11 +1163,7 @@ const ProductCom = () => {
                   viewport={{ once: true }}
                   transition={{ duration: 0.7 }}
                   ref={leftPanelRef}
-                  className={`w-full md:w-full lg:w-5/12 xl:w-4/12 custom-width ${
-                    viewMode === "details"
-                      ? "lg:sticky lg:top-24 lg:self-start max-h-[87vh] overflow-y-auto overflow-x-hidden"
-                      : "max-h-[87vh] overflow-y-auto overflow-x-hidden"
-                  }`}
+                  className="w-full md:w-full lg:w-5/12 xl:w-4/12 custom-width lg:sticky lg:top-24 lg:self-start lg:max-h-[87vh] lg:overflow-y-auto overflow-x-hidden"
                 >
                   <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-6 mb-5">
                     <h1 className="text-[36px] font-[700] text-[#BABEC8]">
@@ -1718,11 +1714,7 @@ const ProductCom = () => {
                   viewport={{ once: true }}
                   transition={{ duration: 0.8 }}
                   ref={rightPanelRef}
-                  className={`w-full md:w-full lg:w-7/12 xl:w-8/12 custom-width2 ${
-                    viewMode === "details"
-                      ? "min-h-[74vh] overflow-visible pb-12"
-                      : "max-h-[74vh] md:max-h-[87vh] overflow-auto"
-                  }`}
+                  className="w-full md:w-full lg:w-7/12 xl:w-8/12 custom-width2 min-h-[74vh] overflow-visible pb-12"
                 >
                   {categoryName && subCategoryName && (
                     <div className="flex items-center flex-wrap gap-2 text-sm mb-6 lg:mb-8">
@@ -1823,7 +1815,7 @@ const ProductCom = () => {
                   )}
 
                   {viewMode === "first" && !searchParams.get("category") && (
-                    <div className="flex items-center justify-around w-full h-[80vh]">
+                    <div className="w-full py-4">
                       <CateComponent2 />
                     </div>
                   )}

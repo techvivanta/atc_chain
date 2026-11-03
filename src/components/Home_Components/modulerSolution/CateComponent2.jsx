@@ -12,6 +12,16 @@ export default function CateComponent2() {
   // Empty animations array - no animations applied to icons
   const animationTypes = [];
 
+  const getImageUrl = (imagePath) => {
+    if (!imagePath) return "";
+    if (imagePath.startsWith("http")) return imagePath;
+    const backendUrl = import.meta.env.VITE_BACKEND_URL || "";
+    if (imagePath.startsWith("/")) {
+      return `${backendUrl}${imagePath}`;
+    }
+    return `${backendUrl}/${imagePath}`;
+  };
+
   // Fetch categories from API
   useEffect(() => {
     const fetchCategories = async () => {
@@ -40,7 +50,7 @@ export default function CateComponent2() {
             .map((category, index) => ({
               id: category.id,
               title: category.name.toUpperCase(),
-              icon: `${import.meta.env.VITE_BACKEND_URL}/${category.image}`,
+              icon: getImageUrl(category.image),
               description: category.description,
               animation: null, // No animation applied
               displayOrder: category.displayOrder,
@@ -65,7 +75,7 @@ export default function CateComponent2() {
 
   // Handle category click navigation
   const handleCategoryClick = (categoryId) => {
-    window.location.href = `/products?category=${categoryId}`;
+    navigate(`/products?category=${categoryId}`);
   };
 
   const cardGridVariants = {
@@ -155,9 +165,9 @@ export default function CateComponent2() {
           <motion.div
             initial="hidden"
             whileInView="visible"
-            viewport={{ once: true, margin: "-60px" }}
+            viewport={{ once: true }}
             variants={cardGridVariants}
-            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-3 md:gap-6 w-full h-auto min-h-[50vh] pb-10"
+            className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-4 gap-3 md:gap-6 w-full h-auto pb-10"
           >
             {solutions.map((item, idx) => (
               <motion.div
